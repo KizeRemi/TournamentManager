@@ -33,10 +33,6 @@ monolog:
 nelmio_api_doc: ~
 
 swiftmailer:
-    transport:          "%mailer_transport%"
-    host:               "%mailer_host%"
-    port:               "%mailer_port%"
-    username:           "%mailer_user%"
-    password:           "%mailer_password%"
-    encryption:         "%mailer_encryption%"
-    delivery_address:   "%mailer_delivery_adress%"
+    transport:          gmail
+    username:           tournament.lpdw@gmail.com
+    password:           tournamentlpdw
