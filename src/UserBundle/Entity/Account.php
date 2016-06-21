@@ -16,7 +16,6 @@ use JMS\Serializer\Annotation\Expose;
  * @package     CoreBundle\Controller
  * @category    classes
  * @author      Mavillaz Remi <remi.mavillaz@live.fr>
- * @author      Laouiti Elias <elias@laouiti.me>
  *
  * @ORM\Table(name="account")
  * @ORM\Entity(repositoryClass="UserBundle\Repository\AccountRepository")
@@ -36,9 +35,8 @@ use JMS\Serializer\Annotation\Expose;
 class Account extends BaseUser
 
 {	const ROLE_SUPER_ADMIN = "ROLE_ADMIN";
-	const ROLE_DEFAULT = "ROLE_DEFAULT";
 	const ROLE_USER = "ROLE_USER";
-	const ROLE_ASSO = "ROLE_ASSO";
+	const ROLE_ORGA = "ROLE_ORGA";
 
     use TimestampableEntity;
 
@@ -75,13 +73,6 @@ class Account extends BaseUser
      */
     protected $region;
 
-
-    /**
-     * @ORM\Column(name="phone", type="string", nullable=true)
-     * @expose
-     */
-    protected $phone;
-
     /**
      * @ORM\Column(name="img", type="string", length=255, nullable=true)
      * @expose
@@ -89,50 +80,12 @@ class Account extends BaseUser
     protected $img;
 
     /**
-     * @ORM\OneToMany(targetEntity="CoreBundle\Entity\Promise", mappedBy="account", cascade={"persist"})
-     */
-    protected $projectPromise;
-
-    /**
-     * Add projectPromise
-     *
-     * @param \CoreBundle\Entity\Promise $projectPromise
-     *
-     * @return Account
-     */
-    public function addProjectPromise(\CoreBundle\Entity\Promise $projectPromise)
-    {
-        $this->projectPromise[] = $projectPromise;
-
-        return $this;
-    }
-
-    /**
-     * Remove projectPromise
-     *
-     * @param \CoreBundle\Entity\Promise $projectPromise
-     */
-    public function removeProjectPromise(\CoreBundle\Entity\Promise $projectPromise)
-    {
-       $this->projectPromise->removeElement($projectPromise);
-    }
-
-    /**
-     * Get projectPromise
-     *
-    * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProjectPromise()
-    {
-        return $this->projectPromise;
-    }
-    /**
-     * Account constructor.
+     * Account constructor
      */
     public function __construct()
     {
         parent::__construct();
-        $this->roles = array(static::ROLE_DEFAULT);
+        $this->roles = array(static::ROLE_USER);
     }
 
     /**
