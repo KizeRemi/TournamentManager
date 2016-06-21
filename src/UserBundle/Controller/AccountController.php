@@ -81,9 +81,7 @@ class AccountController extends Controller implements ClassResourceInterface
 	    $dispatcher = $this->get('event_dispatcher');
 	    $dispatcher->dispatch(RegistrationEvent::NAME, new RegistrationEvent($account));
 
-	    $em = $this->getDoctrine()->getManager();
-	    $em->persist($account);
-	    $em->flush();
+
 
         return new JsonResponse(null, JsonResponse::HTTP_CREATED);
     }
