@@ -1,0 +1,15 @@
+default:
+    type:     rest
+    resource: CoreBundle\Controller\DefaultController
+
+project:
+    type:     rest
+    resource: CoreBundle\Controller\ProjectController
+
+announcement:
+    type:     rest
+    resource: CoreBundle\Controller\AnnouncementController
+
+generic:
+    type:     rest
+    resource: CoreBundle\Controller\GenericController

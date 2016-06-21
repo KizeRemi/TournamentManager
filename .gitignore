@@ -10,3 +10,4 @@
 /vendor/
 /web/bundles/
 /app/var/jwt/*.pem
+/var/cache/*

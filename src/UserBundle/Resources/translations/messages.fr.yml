@@ -1,0 +1,11 @@
+email:
+    reset:
+        subject: 'Réinitialisation de votre mot de passe'
+        message: "Bonjour %username% !\n\nPour réinitialiser votre mot de passe, merci de vous rendre sur %confirmationUrl%\n\nCordialement,\nL'équipe.\n"
+
+    registration:
+        subject: 'Bienvenue %username% !'
+        message: "Bonjour %username% !\n\nPour valider votre compte utilisateur, merci de vous rendre sur %confirmationUrl%\n\nCordialement,\nL'équipe.\n"
+
+constraints:
+    unique: 'Certaines infos existes déjà en base'

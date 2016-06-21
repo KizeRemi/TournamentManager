@@ -1,0 +1,18 @@
+services:
+#    user.example:
+#        class: UserBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]
+    user.reset_password_listener:
+            class: UserBundle\EventListener\ResetPasswordListener
+            tags:
+                - { name: kernel.event_subscriber }
+
+    user.mailer:
+        class: UserBundle\Mailer\UserMailer
+        arguments: ['@mailer', '@twig', { template: { confirmation: '%fos_user.registration.confirmation.template%', resetting: '%fos_user.resetting.email.template%' }, urls:{ base: '%base_url%', profile_url: '%profile_url%', endpoint_signup: '%endpoint_signup%', reset_password: '%reset_password%'}, contact_email: '%contact_email%'}]
+
+    user.register_listener:
+        class: UserBundle\EventListener\RegistrationListener
+        arguments: ['@user.mailer', '@fos_user.util.token_generator']
+        tags:
+           - { name: kernel.event_subscriber }

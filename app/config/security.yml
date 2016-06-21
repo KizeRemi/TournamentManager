@@ -1,9 +1,11 @@
+# To get started with security, check out the documentation:
+# http://symfony.com/doc/current/book/security.html
 security:
     encoders:
         FOS\UserBundle\Model\UserInterface: sha512
 
     role_hierarchy:
-        ROLE_ADMIN:       ROLE_USER
+        ROLE_ADMIN:       ROLE_USERsudo php
         ROLE_SUPER_ADMIN: ROLE_ADMIN
 
     providers:
@@ -11,8 +13,9 @@ security:
             id: fos_user.user_provider.username
 
     firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
-            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
         login:
@@ -28,8 +31,14 @@ security:
         api:
             pattern:   ^/
             stateless: true
+            anonymous: true
             lexik_jwt: ~
 
     access_control:
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/,       roles: IS_AUTHENTICATED_FULLY }
+
+        - { path: ^/contact, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST] }
+        - { path: ^/accounts, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST] }
+        - { path: ^/accounts/confirm_registration, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST] }
+        - { path: ^/accounts/reset_password, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST] }
+        - { path: ^/api/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: IS_AUTHENTICATED_FULLY }

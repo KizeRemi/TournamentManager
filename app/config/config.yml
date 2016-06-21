@@ -2,15 +2,20 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: "@UserBundle/Resources/config/services.yml" }
+    - { resource: "@CoreBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: en
+    locale: fr
+    associations_doc_directory: '%kernel.root_dir%/../web/uploads/associations'
+    accounts_images_directory: '%kernel.root_dir%/../web/uploads/accounts'
+    projects_banners_directory: '%kernel.root_dir%/../web/uploads/projects'
 
 framework:
     #esi:             ~
-    #translator:      { fallbacks: ["%locale%"] }
+    translator:      { fallbacks: ["%locale%"] }
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -21,33 +26,21 @@ framework:
     #serializer:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
     trusted_hosts:   ~
     trusted_proxies: ~
     session:
-        # handler_id set to null will use default session handler from php.ini
-        handler_id:  ~
+        # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
+        handler_id:  session.handler.native_file
+        save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
     fragments:       ~
     http_method_override: true
+    assets: ~
 
 # Twig Configuration
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
-
-# Assetic Configuration
-assetic:
-    debug:          "%kernel.debug%"
-    use_controller: false
-    bundles:        [ ]
-    #java: /usr/bin/java
-    filters:
-        cssrewrite: ~
-        #closure:
-        #    jar: "%kernel.root_dir%/Resources/java/compiler.jar"
-        #yui_css:
-        #    jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"
 
 # Doctrine Configuration
 doctrine:
@@ -59,6 +52,9 @@ doctrine:
         user:     "%database_user%"
         password: "%database_password%"
         charset:  UTF8
+        mapping_types:
+            enum: string
+
         # if using pdo_sqlite as your database driver:
         #   1. add the path in parameters.yml
         #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
@@ -71,6 +67,7 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
 
+
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
@@ -80,9 +77,22 @@ swiftmailer:
     spool:     { type: memory }
 
 fos_user:
-    db_driver:     orm                       
-    firewall_name: main                
-    user_class:    LKE\UserBundle\Entity\User
+    db_driver:     orm
+    firewall_name: main
+    user_class:    UserBundle\Entity\Account
+    registration:
+        confirmation:
+            enabled:    true
+            template:   UserBundle:Emails:ValidateEmail.email.html.twig
+    resetting:
+        token_ttl: 86400
+        email:
+            template:   UserBundle:Emails:ResetPassword.email.html.twig
+        form:
+            type:               fos_user_resetting
+            name:               fos_user_resetting_form
+            validation_groups:  [ResetPassword, Default]
+
 
 jms_serializer:
     metadata:
@@ -93,22 +103,20 @@ jms_serializer:
                 path: "%kernel.root_dir%/config/serializer/fos"
 
 sensio_framework_extra:
-    view:   { annotations: false }
+    view:   { annotations: true }
     router: { annotations: true }
 
 fos_rest:
     param_fetcher_listener: true
     body_listener: true
-    format_listener: true
     disable_csrf_role: IS_AUTHENTICATED_ANONYMOUSLY
+    #service:
+    #    templating: ~
     view:
-        view_response_listener: 'force'
-        templating_formats:
-            html: true
-        force_redirects:
-            html: true
-        failed_validation: HTTP_BAD_REQUEST
         default_engine: twig
+        view_response_listener: 'force'
+        formats:
+            json: true
     routing_loader:
         default_format: json
         include_format: false
@@ -119,3 +127,11 @@ lexik_jwt_authentication:
     pass_phrase:      %jwt_key_pass_phrase%
     token_ttl:        %jwt_token_ttl%
 
+stof_doctrine_extensions:
+    default_locale: fr
+    translation_fallback: true
+    orm:
+        default:
+            tree: true
+            timestampable: true
+            sluggable: true
