@@ -1,7 +1,8 @@
 <h1>Colab REST API</h1>
 <hr/>
-Colab restful api...
+Tournament Manager API
 
+Cette API permet la gestion de tournois de jeux en ligne de manière simple et efficace.
 
 <h2>Getting Started</h2>
 
@@ -11,7 +12,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 To install the project, you need to have on your computer : 
 
-<li> Composer </li>
+<li>Composer </li>
 
 <h3>Installing</h3>
 
@@ -23,7 +24,7 @@ Go to the repo and type the command bellow to create a SSH Key
 $ cd PROJECT_DIR
 $ mkdir -p var/jwt
 $ openssl genrsa -out var/jwt/private.pem -aes256 4096
-$ openssl rsa -pubout -in var/jwt/private.pem -out var/jwt/public.pem`
+$ openssl rsa -pubout -in var/jwt/private.pem -out var/jwt/public.pem
 
 ```
 

@@ -81,7 +81,9 @@ class AccountController extends Controller implements ClassResourceInterface
 	    $dispatcher = $this->get('event_dispatcher');
 	    $dispatcher->dispatch(RegistrationEvent::NAME, new RegistrationEvent($account));
 
-
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($account);
+        $em->flush();
 
         return new JsonResponse(null, JsonResponse::HTTP_CREATED);
     }
@@ -457,9 +459,9 @@ class AccountController extends Controller implements ClassResourceInterface
 	 *     404 = "Returned when email is unknown"
 	 *   }
 	 * )
-	 * @FOSRest\Post("/accounts/confirm_registration/{token}")
+	 * @FOSRest\get("/accounts/confirm_registration/{token}")
 	 */
-	public function postConfirmationRegistrationAction($token){
+	public function getConfirmationRegistrationAction($token){
 		/** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
 		$userManager = $this->get('fos_user.user_manager');
 

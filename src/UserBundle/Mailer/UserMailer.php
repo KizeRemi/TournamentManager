@@ -47,8 +47,7 @@
 		public function sendConfirmationEmailMessage(UserInterface $user)
 		{
 			$template = $this->parameters['template']['confirmation'];
-			$url = $this->parameters['urls']["base"].$this->parameters['urls']["endpoint_signup"]."/".$user->getConfirmationToken();
-
+			$url = $this->parameters['urls']["endpoint_signup"]."/".$user->getConfirmationToken();
 			$context = array(
 				'user' => $user,
 				'confirmationUrl' => $url
