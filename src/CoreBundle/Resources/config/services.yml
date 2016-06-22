@@ -5,6 +5,6 @@ services:
     user.images_uploader:
         class: CoreBundle\Service\FileUploader
         arguments: ['%accounts_images_directory%']
-    users.banners_uploader:
+    user.banners_uploader:
         class: CoreBundle\Service\FileUploader
         arguments: ['%accounts_banners_directory%']

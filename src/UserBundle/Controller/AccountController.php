@@ -268,6 +268,48 @@ class AccountController extends Controller implements ClassResourceInterface
 	    return new JsonResponse(null, 201);
     }
 
+	/**
+	 * Add banner to account
+	 *
+	 * @param ParamFetcherInterface $paramFetcherInterface Contain all body parameters received
+	 *
+	 * @return JsonResponse Return 204 and empty array if account was created OR 400 and error message JSON if error
+	 *
+	 * @ApiDoc(
+	 *  section="Accounts",
+	 *  description="Add banner to account",
+	 *  resource = true,
+	 *  statusCodes = {
+	 *     201 = "Returned when successful"
+	 *   }
+	 * )
+	 * @FOSRest\Post("/me/banner")
+	 * @FOSRest\FileParam(name="banner", image=true, default="noPicture")
+	 *
+	 * @Security("has_role('ROLE_USER')")
+	 *
+	 */
+    public function postBannerAction(ParamFetcherInterface $paramFetcherInterface){
+        $account = $this->getUser();
+
+	    $banner = $paramFetcherInterface->get("banner");
+	    
+	    if($account->getBanner() != null){
+	    	unlink($this->container->getParameter('accounts_banners_directory')."/".$account->getBanner());    	
+	    }
+
+	    $fileName = $this->get('user.banners_uploader')->upload("banner", $banner);
+	    $account->setBanner($fileName);
+
+        $userManager = $this->get("fos_user.user_manager");
+        $userManager->updateUser($account);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($account);
+        $em->flush();
+
+	    return new JsonResponse(null, 201);
+    }
+
     /**
      * Get all accounts
      * @return JsonResponse Return 200 and Account array if account was founded OR 404 and error message JSON if error
@@ -282,7 +324,7 @@ class AccountController extends Controller implements ClassResourceInterface
      *   }
      * )
      *
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("has_role('ROLE_USER')")
      */
     public function cgetAction(){
         // TODO : Limit view to ROLE_ADMIN
