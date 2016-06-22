@@ -1,4 +1,4 @@
-<h1>Colab REST API</h1>
+<h1>Tournament Manager API</h1>
 <hr/>
 Tournament Manager API
 
@@ -44,5 +44,4 @@ With your favorite browser, go to [http://127.0.0.1/docs](http://127.0.0.1/docs)
 
 <h2>Authors</h2>
 
-<li>Laouiti Elias Cédric [Github](https://github.com/morpheus93)
 <li>Mavilaz Rémi [Github](https://github.com/KizeRemi)
