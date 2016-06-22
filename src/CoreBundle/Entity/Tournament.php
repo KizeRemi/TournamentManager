@@ -65,7 +65,11 @@ class Tournament
      */
     protected $playerMax;
 
+  /**
+   * @ORM\ManyToMany(targetEntity="UserBundle\Entity\Account", cascade={"persist"})
+   */
 
+  private $accounts;
 
     /**
      * Get id
@@ -195,5 +199,46 @@ class Tournament
     public function getPlayerMax()
     {
         return $this->playerMax;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->accounts = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add account
+     *
+     * @param \UserBundle\Entity\Account $account
+     *
+     * @return Tournament
+     */
+    public function addAccount(\UserBundle\Entity\Account $account)
+    {
+        $this->accounts[] = $account;
+
+        return $this;
+    }
+
+    /**
+     * Remove account
+     *
+     * @param \UserBundle\Entity\Account $account
+     */
+    public function removeAccount(\UserBundle\Entity\Account $account)
+    {
+        $this->accounts->removeElement($account);
+    }
+
+    /**
+     * Get accounts
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAccounts()
+    {
+        return $this->accounts;
     }
 }
