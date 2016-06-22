@@ -31,8 +31,3 @@ monolog:
         #    level:  info
 
 nelmio_api_doc: ~
-
-swiftmailer:
-    transport:          gmail
-    username:           tournament.lpdw@gmail.com
-    password:           tournamentlpdw

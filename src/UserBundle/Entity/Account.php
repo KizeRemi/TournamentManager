@@ -7,6 +7,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Account Entity
@@ -27,6 +28,10 @@ use JMS\Serializer\Annotation\Expose;
  * )
  * @UniqueEntity(
  *     fields={"email"},
+ *     message="constraints.unique",
+ * )
+ * @UniqueEntity(
+ *     fields={"nickname"},
  *     message="constraints.unique",
  * )
  */
@@ -50,11 +55,37 @@ class Account extends BaseUser
     protected $id;
 
     /**
+     * @ORM\Column(name="nickname",type="string", length=25, nullable=true)
+     * @expose
+     */
+    protected $nickname;
+
+    /**
      * @ORM\Column(name="address", type="string", length=60, nullable=true)
      * @expose
      */
     protected $address;
 
+    /**
+     * @ORM\Column(name="name",type="string", length=25, nullable=true)
+     */
+    protected $name;
+
+    /**
+     * @ORM\Column(name="lastname",type="string", length=25, nullable=true)
+     */
+    protected $lastname;
+
+    /**
+     * @Gedmo\Slug(fields={"name", "lastname"}, updatable=true)
+     * @ORM\Column(length=255, unique=true)
+     */
+    private $slug;
+
+    /**
+     * @ORM\Column(name="birth_date",type="date", length=25, nullable=true)
+     */
+    protected $birth_date;
     /**
      * @ORM\Column(name="city",type="string", length=25, nullable=true)
      * @expose
@@ -77,7 +108,13 @@ class Account extends BaseUser
      * @ORM\Column(name="img", type="string", length=255, nullable=true)
      * @expose
      */
+
     protected $img;
+    /**
+     * @ORM\Column(name="banner", type="string", length=255, nullable=true)
+     * @expose
+     */
+    protected $banner;
 
     /**
      * Account constructor
@@ -254,4 +291,148 @@ class Account extends BaseUser
         return parent::setEmail($email);
     }
 
+
+    /**
+     * Set nickname
+     *
+     * @param string $nickname
+     *
+     * @return Account
+     */
+    public function setNickname($nickname)
+    {
+        $this->nickname = $nickname;
+
+        return $this;
+    }
+
+    /**
+     * Get nickname
+     *
+     * @return string
+     */
+    public function getNickname()
+    {
+        return $this->nickname;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Account
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set lastname
+     *
+     * @param string $lastname
+     *
+     * @return Account
+     */
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    /**
+     * Get lastname
+     *
+     * @return string
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     *
+     * @return Account
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Set birthDate
+     *
+     * @param \DateTime $birthDate
+     *
+     * @return Account
+     */
+    public function setBirthDate($birthDate)
+    {
+        $this->birth_date = $birthDate;
+
+        return $this;
+    }
+
+    /**
+     * Get birthDate
+     *
+     * @return \DateTime
+     */
+    public function getBirthDate()
+    {
+        return $this->birth_date;
+    }
+
+    /**
+     * Set banner
+     *
+     * @param string $banner
+     *
+     * @return Account
+     */
+    public function setBanner($banner)
+    {
+        $this->banner = $banner;
+
+        return $this;
+    }
+
+    /**
+     * Get banner
+     *
+     * @return string
+     */
+    public function getBanner()
+    {
+        return $this->banner;
+    }
 }

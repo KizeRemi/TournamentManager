@@ -11,3 +11,5 @@
 /web/bundles/
 /app/var/jwt/*.pem
 /var/cache/*
+/web/accounts/*
+/docs

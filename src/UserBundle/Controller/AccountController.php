@@ -55,10 +55,10 @@ class AccountController extends Controller implements ClassResourceInterface
      * @FOSRest\RequestParam(name="email", nullable=false, requirements=@CoreBundle\Validator\Constraints\Email, description="Account's email")
      * @FOSRest\RequestParam(name="password", nullable=false, description="Account's password")
      * @FOSRest\RequestParam(name="password_confirmation", nullable=false, description="Password confirmation")
+     * @FOSRest\RequestParam(name="nickname", nullable=false, requirements=@CoreBundle\Validator\Constraints\Name, description="Account's nickname")
      */
 	public function postAction(ParamFetcherInterface $paramFetcher)
     {
-        // TODO : Validator
         if ($paramFetcher->get('password') !== $paramFetcher->get('password_confirmation')) {
             $resp = array("message" => "Password and confirmation password doesn't match");
             return new JsonResponse($resp, JsonResponse::HTTP_BAD_REQUEST);
@@ -66,12 +66,12 @@ class AccountController extends Controller implements ClassResourceInterface
 
         $account = new Account();
         $account->setEmail($paramFetcher->get('email'));
+        $account->setNickname($paramFetcher->get('nickname'));
         $account->setPlainPassword($paramFetcher->get('password'));
 	    $validator = $this->get("validator");
 	    $errors = $validator->validate($account);
-
 	    if(count($errors) > 0){
-		    return new JsonResponse("already exist email", JsonResponse::HTTP_BAD_REQUEST);
+		    return new JsonResponse("already exist email or nickname", JsonResponse::HTTP_BAD_REQUEST);
 	    }
 
 	    $userManager = $this->get("fos_user.user_manager");
@@ -108,7 +108,7 @@ class AccountController extends Controller implements ClassResourceInterface
 	 * @FOSRest\RequestParam(name="password", nullable=false, description="Account's password")
 	 * @FOSRest\RequestParam(name="password_confirmation", nullable=false, description="Password confirmation")
 	 *
-	 * @Security("has_role('ROLE_DEFAULT')")
+	 * @Security("has_role('ROLE_USER')")
 	 *
 	 */
     public function patchPasswordAction(ParamFetcherInterface $paramFetcherInterface){
@@ -150,9 +150,11 @@ class AccountController extends Controller implements ClassResourceInterface
      * )
      * @FOSRest\RequestParam(name="address", nullable=true, description="Account's address")
      * @FOSRest\RequestParam(name="region", nullable=true, description="Account's region")
-     * @FOSRest\RequestParam(name="phone", nullable=true, description="Account's phone")
      * @FOSRest\RequestParam(name="city", nullable=true, description="Account's city")
      * @FOSRest\RequestParam(name="country", nullable=true, description="Account's country")
+     * @FOSRest\RequestParam(name="birth_date", nullable=true, description="Account's birthday")
+     * @FOSRest\RequestParam(name="name", nullable=true, description="Account's name")
+     * @FOSRest\RequestParam(name="lastname", nullable=true, description="Account's lastname")
 	 *
      * @FOSRest\Patch("/me")
      *
@@ -163,10 +165,11 @@ class AccountController extends Controller implements ClassResourceInterface
 
         $account->setAddress($paramFetcher->get('address'));
         $account->setRegion($paramFetcher->get('region'));
-        $account->setPhone($paramFetcher->get('phone'));
         $account->setCountry($paramFetcher->get('country'));
         $account->setCity($paramFetcher->get('city'));
-
+        $account->setName($paramFetcher->get('name'));
+        $account->setLastname($paramFetcher->get('lastname'));
+        $account->setBirthdate($paramFetcher->get('birth_date'));
 
 	    $validator = $this->get("validator");
 	    $errors = $validator->validate($account);
@@ -241,7 +244,7 @@ class AccountController extends Controller implements ClassResourceInterface
 	 * @FOSRest\Post("/me/image")
 	 * @FOSRest\FileParam(name="img", image=true, default="noPicture")
 	 *
-	 * @Security("has_role('ROLE_DEFAULT')")
+	 * @Security("has_role('ROLE_USER')")
 	 *
 	 */
     public function postImageAction(ParamFetcherInterface $paramFetcherInterface){
