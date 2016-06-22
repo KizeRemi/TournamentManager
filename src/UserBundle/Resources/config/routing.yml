@@ -1,9 +1,3 @@
 account:
     type:     rest
     resource: UserBundle\Controller\AccountController
-user:
-    type:     rest
-    resource: UserBundle\Controller\UserController
-association:
-    type:     rest
-    resource: UserBundle\Controller\AssociationController
