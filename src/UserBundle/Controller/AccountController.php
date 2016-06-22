@@ -348,10 +348,14 @@ class AccountController extends Controller implements ClassResourceInterface
      *   }
      * )
      * @FOSRest\Get("/me")
-     * @Security("has_role('ROLE_DEFAULT')")
+     * @Security("has_role('ROLE_USER')")
     */
     public function getMeAction(){
-        return $this->getAccountInfos($this->getUser());
+    	$account = $this->getUser();
+    	
+    	$em = $this->getDoctrine()->getRepository("UserBundle:Account");
+		$account = $em->find($account);
+        return $account;
     }
     
     /**

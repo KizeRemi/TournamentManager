@@ -99,7 +99,7 @@ class Account extends BaseUser
     protected $country;
 
     /**
-     * @ORM\Column(name="region",type="boolean", nullable=true)
+     * @ORM\Column(name="region",type="string", nullable=true)
      * @expose
      */
     protected $region;
