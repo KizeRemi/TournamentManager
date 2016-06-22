@@ -152,7 +152,7 @@ class AccountController extends Controller implements ClassResourceInterface
      * @FOSRest\RequestParam(name="region", nullable=true, description="Account's region")
      * @FOSRest\RequestParam(name="city", nullable=true, description="Account's city")
      * @FOSRest\RequestParam(name="country", nullable=true, description="Account's country")
-     * @FOSRest\RequestParam(name="birth_date", nullable=true, description="Account's birthday")
+     * @FOSRest\RequestParam(name="birth_date", nullable=true, requirements=@CoreBundle\Validator\Constraints\Date, description="Account's birthday")
      * @FOSRest\RequestParam(name="name", nullable=true, description="Account's name")
      * @FOSRest\RequestParam(name="lastname", nullable=true, description="Account's lastname")
 	 *
@@ -169,7 +169,8 @@ class AccountController extends Controller implements ClassResourceInterface
         $account->setCity($paramFetcher->get('city'));
         $account->setName($paramFetcher->get('name'));
         $account->setLastname($paramFetcher->get('lastname'));
-        $account->setBirthdate($paramFetcher->get('birth_date'));
+        $birthDate = new \DateTime($paramFetcher->get('birth_date'));
+        $account->setBirthDate($birthDate);
 
 	    $validator = $this->get("validator");
 	    $errors = $validator->validate($account);
