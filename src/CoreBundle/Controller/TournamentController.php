@@ -140,7 +140,7 @@ class TournamentController extends Controller implements ClassResourceInterface
     {
 		$account = $this->getUser();
 
-       	$match = new Match();
+       	
        	$tournament->addListAccount($account);
 
 	    
@@ -155,28 +155,20 @@ class TournamentController extends Controller implements ClassResourceInterface
      * get registered to tournaments
      *
      * @param ParamFetcherInterface $paramFetcher Contain all body parameters received
-     * @return JsonResponse Return 201 and empty array if tournament was created OR 400 and error message JSON if error
+     * @return JsonResponse Return 200 or empty array if tournament has no registers
      *
      * @ApiDoc(
      *  section="Tournaments",
-     *  description="get susb",
+     *  description="get registered to tournaments",
      *  resource = true,
      *  statusCodes = {
-     *     201 = "Returned when successful",
+     *     200 = "Returned when successful",
      *   }
      * )
+     * @Security("has_role('ROLE_USER')")
      */
-	public function getSignupAction(ParamFetcherInterface $paramFetcher, Tournament $tournament)
+	public function getRegisterAction(ParamFetcherInterface $paramFetcher, Tournament $tournament)
     {
-		$account = $this->getUser();
-
-       	$match = new Match();
-       	$tournament->addListAccount($account);
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($tournament);
-        $em->flush();
-
-        return new JsonResponse(null, JsonResponse::HTTP_CREATED);
+		return $tournament->getAccounts();
     }
 }

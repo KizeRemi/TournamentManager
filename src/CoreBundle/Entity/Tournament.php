@@ -78,8 +78,9 @@ class Tournament
 
     /**
      * @ORM\ManyToMany(targetEntity="UserBundle\Entity\Account", cascade={"persist"})
+     * @expose
      */
-    private $listAccounts;
+    private $accounts;
 
     /**
     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Account")
@@ -250,40 +251,6 @@ class Tournament
     }
 
     /**
-     * Add listAccount
-     *
-     * @param \UserBundle\Entity\Account $listAccount
-     *
-     * @return Tournament
-     */
-    public function addListAccount(\UserBundle\Entity\Account $listAccount)
-    {
-        $this->listAccounts[] = $listAccount;
-
-        return $this;
-    }
-
-    /**
-     * Remove listAccount
-     *
-     * @param \UserBundle\Entity\Account $listAccount
-     */
-    public function removeListAccount(\UserBundle\Entity\Account $listAccount)
-    {
-        $this->listAccounts->removeElement($listAccount);
-    }
-
-    /**
-     * Get listAccounts
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getListAccounts()
-    {
-        return $this->listAccounts;
-    }
-
-    /**
      * Set createdBy
      *
      * @param \UserBundle\Entity\Account $createdBy
@@ -329,5 +296,39 @@ class Tournament
     public function getAccount()
     {
         return $this->account;
+    }
+
+    /**
+     * Add account
+     *
+     * @param \UserBundle\Entity\Account $account
+     *
+     * @return Tournament
+     */
+    public function addAccount(\UserBundle\Entity\Account $account)
+    {
+        $this->accounts[] = $account;
+
+        return $this;
+    }
+
+    /**
+     * Remove account
+     *
+     * @param \UserBundle\Entity\Account $account
+     */
+    public function removeAccount(\UserBundle\Entity\Account $account)
+    {
+        $this->accounts->removeElement($account);
+    }
+
+    /**
+     * Get accounts
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAccounts()
+    {
+        return $this->accounts;
     }
 }
