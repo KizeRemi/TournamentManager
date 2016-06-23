@@ -19,7 +19,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @author      Mavillaz Remi <remi.mavillaz@live.fr>
  *
  * @ORM\Table(name="tournament")
- * @ORM\Entity(repositoryClass="UserBundle\Repository\TournamentRepository")
+ * @ORM\Entity(repositoryClass="CoreBundle\Repository\TournamentRepository")
  * @ExclusionPolicy("all")
  *
  */
@@ -51,25 +51,42 @@ class Tournament
     protected $game;
 
     /**
-     * @ORM\Column(name="dateBegin",type="date", length=25, nullable=false)
+     * @ORM\Column(name="date_begin",type="datetime", length=25, nullable=false)
+     * @expose
      */
     protected $dateBegin;
 
     /**
      * @ORM\Column(name="duration_between_round",type="integer", length=25, nullable=false)
+     * @expose
      */
     protected $durationBetweenRound;
 
     /**
      * @ORM\Column(name="player_max",type="integer", length=25, nullable=false)
+     * @expose
      */
     protected $playerMax;
 
-  /**
-   * @ORM\ManyToMany(targetEntity="UserBundle\Entity\Account", cascade={"persist"})
-   */
+    /**
+     * @var string Tournament state
+     *
+     * @ORM\Column(name="state", type="string", length=15, columnDefinition="enum('Ouvert','Complet', 'En cours', 'Terminé')")
+     * @expose
+     */
+    private $state;
 
-  private $accounts;
+    /**
+     * @ORM\ManyToMany(targetEntity="UserBundle\Entity\Account", cascade={"persist"})
+     */
+    private $listAccounts;
+
+    /**
+    * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Account", inversedBy="tournaments", cascade={"remove"})
+    * @ORM\JoinColumn(name="account_id", referencedColumnName="id")
+    * @expose
+    */
+    protected $accounts;
 
     /**
      * Get id
@@ -154,37 +171,13 @@ class Tournament
     }
 
     /**
-     * Set durationBetweenRound
-     *
-     * @param \number $durationBetweenRound
-     *
-     * @return Tournament
-     */
-    public function setDurationBetweenRound(\number $durationBetweenRound)
-    {
-        $this->durationBetweenRound = $durationBetweenRound;
-
-        return $this;
-    }
-
-    /**
-     * Get durationBetweenRound
-     *
-     * @return \number
-     */
-    public function getDurationBetweenRound()
-    {
-        return $this->durationBetweenRound;
-    }
-
-    /**
      * Set playerMax
      *
-     * @param \int $playerMax
+     * @param \integer $playerMax
      *
      * @return Tournament
      */
-    public function setPlayerMax(\int $playerMax)
+    public function setPlayerMax($playerMax)
     {
         $this->playerMax = $playerMax;
 
@@ -194,7 +187,7 @@ class Tournament
     /**
      * Get playerMax
      *
-     * @return \int
+     * @return \integer
      */
     public function getPlayerMax()
     {
@@ -240,5 +233,111 @@ class Tournament
     public function getAccounts()
     {
         return $this->accounts;
+    }
+
+    /**
+     * Set durationBetweenRound
+     *
+     * @param integer $durationBetweenRound
+     *
+     * @return Tournament
+     */
+    public function setDurationBetweenRound($durationBetweenRound)
+    {
+        $this->durationBetweenRound = $durationBetweenRound;
+
+        return $this;
+    }
+
+    /**
+     * Get durationBetweenRound
+     *
+     * @return integer
+     */
+    public function getDurationBetweenRound()
+    {
+        return $this->durationBetweenRound;
+    }
+
+    /**
+     * Set state
+     *
+     * @param string $state
+     *
+     * @return Tournament
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * Add listAccount
+     *
+     * @param \UserBundle\Entity\Account $listAccount
+     *
+     * @return Tournament
+     */
+    public function addListAccount(\UserBundle\Entity\Account $listAccount)
+    {
+        $this->listAccounts[] = $listAccount;
+
+        return $this;
+    }
+
+    /**
+     * Remove listAccount
+     *
+     * @param \UserBundle\Entity\Account $listAccount
+     */
+    public function removeListAccount(\UserBundle\Entity\Account $listAccount)
+    {
+        $this->listAccounts->removeElement($listAccount);
+    }
+
+    /**
+     * Get listAccounts
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getListAccounts()
+    {
+        return $this->listAccounts;
+    }
+
+    /**
+     * Set createdBy
+     *
+     * @param \UserBundle\Entity\Account $createdBy
+     *
+     * @return Tournament
+     */
+    public function setCreatedBy(\UserBundle\Entity\Account $createdBy = null)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get createdBy
+     *
+     * @return \UserBundle\Entity\Account
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
     }
 }

@@ -117,6 +117,11 @@ class Account extends BaseUser
     protected $banner;
 
     /**
+    * @ORM\OneToMany(targetEntity="CoreBundle\Entity\Tournament", mappedBy="Account", cascade={"remove", "persist"})
+    */
+    protected $tournaments;
+
+    /**
      * Account constructor
      */
     public function __construct()
@@ -434,5 +439,39 @@ class Account extends BaseUser
     public function getBanner()
     {
         return $this->banner;
+    }
+
+    /**
+     * Add tournament
+     *
+     * @param \CoreBundle\Entity\Tournament $tournament
+     *
+     * @return Account
+     */
+    public function addTournament(\CoreBundle\Entity\Tournament $tournament)
+    {
+        $this->tournaments[] = $tournament;
+
+        return $this;
+    }
+
+    /**
+     * Remove tournament
+     *
+     * @param \CoreBundle\Entity\Tournament $tournament
+     */
+    public function removeTournament(\CoreBundle\Entity\Tournament $tournament)
+    {
+        $this->tournaments->removeElement($tournament);
+    }
+
+    /**
+     * Get tournaments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTournaments()
+    {
+        return $this->tournaments;
     }
 }

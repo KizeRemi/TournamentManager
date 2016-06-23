@@ -30,7 +30,7 @@ use UserBundle\EventListener\RegistrationListener;
  *
  * @package     UserBundle\Controller
  * @category    controllers
- * @author      Elias Cédric Laouiti <elias@laouiti.me>
+ * @author      Remi Mavillaz <remi.mavillaz@live.fr>
  *
  */
 
@@ -210,7 +210,7 @@ class AccountController extends Controller implements ClassResourceInterface
 	 * @FOSRest\Patch("/accounts/me/email")
 	 * @FOSRest\RequestParam(name="email", nullable=false, description="Account's email")
 	 *
-	 * @Security("has_role('ROLE_DEFAULT')")
+	 * @Security("has_role('ROLE_USER')")
 	 *
 	 */
     public function patchEmailAction(ParamFetcherInterface $paramFetcherInterface){

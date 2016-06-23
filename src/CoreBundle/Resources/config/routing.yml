@@ -1,3 +1,7 @@
 default:
     type:     rest
     resource: CoreBundle\Controller\DefaultController
+
+tournament:
+    type:     rest
+    resource: CoreBundle\Controller\TournamentController
