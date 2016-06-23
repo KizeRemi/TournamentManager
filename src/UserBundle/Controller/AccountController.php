@@ -356,6 +356,7 @@ class AccountController extends Controller implements ClassResourceInterface
     	
     	$em = $this->getDoctrine()->getRepository("UserBundle:Account");
 		$account = $em->find($account);
+
         return $account;
     }
     
@@ -375,12 +376,11 @@ class AccountController extends Controller implements ClassResourceInterface
      * )
      * @ParamConverter("account", class="UserBundle:Account")
      *
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("has_role('ROLE_USER')")
      */
     public function getAction(Account $account)
     {
-        // TODO : Limit view to ROLE_ADMIN
-	    return $this->getAccountInfos($account);
+	    return $account;
     }
 
 	/**
@@ -530,33 +530,4 @@ class AccountController extends Controller implements ClassResourceInterface
 
 		return new JsonResponse("", JsonResponse::HTTP_ACCEPTED);
 	}
-
-	/**
-	 * Get account info
-	 *
-	 * @param Account $account
-	 *
-	 * @return null|User|Association
-	 */
-	private function getAccountInfos(Account $account) {
-		$resp   = null;
-		$infos  = null;
-		$table  = null;
-		$em     = null;
-
-		if ($account->hasRole(Account::ROLE_ASSO)) {
-			$em = $this->getDoctrine()->getRepository("UserBundle:Association");
-			$infos = $em->findOneByAccount($account);
-		} elseif ($account->hasRole(Account::ROLE_USER)) {
-			$em = $this->getDoctrine()->getRepository("UserBundle:User");
-			$infos = $em->findOneByAccount($account);
-		}
-
-		if(!$infos){
-			return new JsonResponse(null, JsonResponse::HTTP_NOT_FOUND);
-		}
-		/** @var  Association|User $infos */
-		return $infos;
-	}
-
 }
