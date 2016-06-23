@@ -140,10 +140,7 @@ class TournamentController extends Controller implements ClassResourceInterface
     {
 		$account = $this->getUser();
 
-       	
-       	$tournament->addListAccount($account);
-
-	    
+       	$tournament->addAccount($account);
         $em = $this->getDoctrine()->getManager();
         $em->persist($tournament);
         $em->flush();
