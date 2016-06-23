@@ -124,6 +124,7 @@ class TournamentController extends Controller implements ClassResourceInterface
     /**
      * register to a match
      *
+     * @param Tournament $tournament
      * @param ParamFetcherInterface $paramFetcher Contain all body parameters received
      * @return JsonResponse Return 201 and empty array if tournament was created OR 400 and error message JSON if error
      *
@@ -140,7 +141,17 @@ class TournamentController extends Controller implements ClassResourceInterface
     {
 		$account = $this->getUser();
 
+		$registers = $tournament->getAccounts($account);
+		if(count($registers) >= 8){
+            $resp = array("message" => "this tournament already has the maximum number of required players");
+            return new JsonResponse($resp, 200);
+		};
+		if($registers->contains($account)){
+            $resp = array("message" => "You are already registered in this tournament");
+            return new JsonResponse($resp, 200);
+		}
        	$tournament->addAccount($account);
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($tournament);
         $em->flush();
