@@ -152,7 +152,7 @@ class AccountController extends Controller implements ClassResourceInterface
      * @FOSRest\RequestParam(name="region", nullable=true, description="Account's region")
      * @FOSRest\RequestParam(name="city", nullable=true, description="Account's city")
      * @FOSRest\RequestParam(name="country", nullable=true, description="Account's country")
-     * @FOSRest\RequestParam(name="birth_date", requirements=@CoreBundle\Validator\Constraints\Name, nullable=false, description="Account's birthday")
+     * @FOSRest\RequestParam(name="birth_date", requirements=@CoreBundle\Validator\Constraints\Date, nullable=false, description="Account's birthday")
      * @FOSRest\RequestParam(name="name", nullable=true, description="Account's name")
      * @FOSRest\RequestParam(name="lastname", nullable=true, description="Account's lastname")
 	 *

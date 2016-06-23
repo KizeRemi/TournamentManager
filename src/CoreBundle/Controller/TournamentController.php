@@ -12,6 +12,7 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use JMS\Serializer\SerializerBuilder;
 use CoreBundle\Entity\Tournament;
+use CoreBundle\Entity\Match;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 /*
@@ -118,5 +119,34 @@ class TournamentController extends Controller implements ClassResourceInterface
         $em = $this->getDoctrine()->getRepository("CoreBundle:Tournament");
         $tournaments = $em->findAll();
         return $tournaments;
+    }
+
+    /**
+     * subscribe a match
+     *
+     * @param ParamFetcherInterface $paramFetcher Contain all body parameters received
+     * @return JsonResponse Return 201 and empty array if tournament was created OR 400 and error message JSON if error
+     *
+     * @ApiDoc(
+     *  section="Tournaments",
+     *  description="Create new match for a tournament",
+     *  resource = true,
+     *  statusCodes = {
+     *     201 = "Returned when successful",
+     *   }
+     * )
+     */
+	public function postSubscribeAction(ParamFetcherInterface $paramFetcher, Tournament $tournament)
+    {
+		$account = $this->getUser();
+
+       	$match = new Match();
+       	$tournament->addListAccount($account);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($tournament);
+        $em->flush();
+
+        return new JsonResponse(null, JsonResponse::HTTP_CREATED);
     }
 }

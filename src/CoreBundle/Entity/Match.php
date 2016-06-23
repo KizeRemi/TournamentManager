@@ -49,6 +49,34 @@ class Match
     private $playerTwo;
 
     /**
+     * @var bool Match playerOne ready
+     *
+     * @ORM\Column(name="ready_player_one", type="boolean")
+     */
+    private $readyPlayerOne;
+
+    /**
+     * @var bool Match playerTwo ready
+     *
+     * @ORM\Column(name="ready_player_two", type="boolean")
+     */
+    private $readyPlayerTwo;
+
+    /**
+     * @var bool Match playerOne result
+     *
+     * @ORM\Column(name="result_player_one", type="boolean")
+     */
+    private $resultPlayerOne;
+
+    /**
+     * @var bool Match playerOne result
+     *
+     * @ORM\Column(name="result_player_two", type="boolean")
+     */
+    private $resultPlayerTwo;
+
+    /**
      * Get id
      *
      * @return integer
@@ -104,5 +132,101 @@ class Match
     public function getPlayerTwo()
     {
         return $this->playerTwo;
+    }
+
+    /**
+     * Set readyPlayerOne
+     *
+     * @param boolean $readyPlayerOne
+     *
+     * @return Match
+     */
+    public function setReadyPlayerOne($readyPlayerOne)
+    {
+        $this->readyPlayerOne = $readyPlayerOne;
+
+        return $this;
+    }
+
+    /**
+     * Get readyPlayerOne
+     *
+     * @return boolean
+     */
+    public function getReadyPlayerOne()
+    {
+        return $this->readyPlayerOne;
+    }
+
+    /**
+     * Set readyPlayerTwo
+     *
+     * @param boolean $readyPlayerTwo
+     *
+     * @return Match
+     */
+    public function setReadyPlayerTwo($readyPlayerTwo)
+    {
+        $this->readyPlayerTwo = $readyPlayerTwo;
+
+        return $this;
+    }
+
+    /**
+     * Get readyPlayerTwo
+     *
+     * @return boolean
+     */
+    public function getReadyPlayerTwo()
+    {
+        return $this->readyPlayerTwo;
+    }
+
+    /**
+     * Set resultPlayerOne
+     *
+     * @param boolean $resultPlayerOne
+     *
+     * @return Match
+     */
+    public function setResultPlayerOne($resultPlayerOne)
+    {
+        $this->resultPlayerOne = $resultPlayerOne;
+
+        return $this;
+    }
+
+    /**
+     * Get resultPlayerOne
+     *
+     * @return boolean
+     */
+    public function getResultPlayerOne()
+    {
+        return $this->resultPlayerOne;
+    }
+
+    /**
+     * Set resultPlayerTwo
+     *
+     * @param boolean $resultPlayerTwo
+     *
+     * @return Match
+     */
+    public function setResultPlayerTwo($resultPlayerTwo)
+    {
+        $this->resultPlayerTwo = $resultPlayerTwo;
+
+        return $this;
+    }
+
+    /**
+     * Get resultPlayerTwo
+     *
+     * @return boolean
+     */
+    public function getResultPlayerTwo()
+    {
+        return $this->resultPlayerTwo;
     }
 }

@@ -84,6 +84,7 @@ class Account extends BaseUser
 
     /**
      * @ORM\Column(name="birth_date",type="date", length=25, nullable=true)
+     * @expose
      */
     protected $birth_date;
     /**
