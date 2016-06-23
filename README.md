@@ -6,41 +6,51 @@ Cette API permet la gestion de tournois de jeux en ligne de manière simple et e
 
 <h2>Getting Started</h2>
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+Les instructions vont vous permettre d'installer le projet en local sur votre machine.
 
 <h3>Prerequisities</h3>
 
-To install the project, you need to have on your computer : 
+Pour installer le projet, vous devez installer : 
 
 <li>Composer </li>
 
 <h3>Installing</h3>
 
-Open a terminal on your computer, go to the installation folder, and clone the repo. 
+Ouvrez le terminal de votre ordinateur, allez dans le dossier d'installation du projet et cloner le dépot.
 
-Go to the repo and type the command bellow to create a SSH Key
-
-```
-$ cd PROJECT_DIR
-$ mkdir -p var/jwt
-$ openssl genrsa -out var/jwt/private.pem -aes256 4096
-$ openssl rsa -pubout -in var/jwt/private.pem -out var/jwt/public.pem
+Allez dans le dépot et faites les commandes suivantes pour créer une clé SSL
 
 ```
+cd NOM_DU_DOSSIER
+mkdir -p var/jwt
+openssl genrsa -out var/jwt/private.pem -aes256 4096
+openssl rsa -pubout -in var/jwt/private.pem -out var/jwt/public.pem
 
-`$ composer update`
+```
+Créez une base de données pour votre projet.
+Installez les dépendances du projet.
 
-Complete the asked informations.
+`composer update`
 
-<h3>Generating Documentation</h3>
+Complétez les informations lors de l'installation (connexion avec votre base de données notamment)
 
-First, you have to install [PHPDocumentor](https://phpdoc.org/docs/latest/getting-started/installing.html). 
+Générez les tables avec la commande suivante
+```
+php bin/console doctrine:schema:update --force
 
-Next, go to project folder and type that : 
+```
+<h3>Générez la documentation (optionnel)</h3>
 
-`$ phpdoc -d ./src -t ./docs`
+Premièrement, vous devez installer [PHPDocumentor](https://phpdoc.org/docs/latest/getting-started/installing.html). 
 
-With your favorite browser, go to [http://127.0.0.1/docs](http://127.0.0.1/docs) to read the doc. 
+Puis, allez dans votre projet et faites la commande: 
+
+`phpdoc -d ./src -t ./docs`
+
+Avec votre navigateur, allez sur [http://127.0.0.1/docs](http://127.0.0.1/docs) pour lire la doc.
+Vous pouvez voir les différentes routes accessibles par l'API via l'adresse: 
+http://localhost/NOMDUPROJET/web/app_dev.php/api/doc
+Les routes se mettent à jour automatiquement.
 
 <h2>Authors</h2>
 
