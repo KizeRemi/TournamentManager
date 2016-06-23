@@ -10,4 +10,14 @@ namespace CoreBundle\Repository;
  */
 class TournamentRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function getByState($account_id)
+	{
+		$query = $this->createQueryBuilder('t')
+			->select('COUNT(t)')
+			->setParameter('account_id', $account_id)
+			->where('t.account = :account_id')
+			->AndWhere('t.state = 1')
+			->getQuery();
+		return $query->getSingleScalarResult();
+	}
 }

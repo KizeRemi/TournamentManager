@@ -82,11 +82,11 @@ class Tournament
     private $listAccounts;
 
     /**
-    * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Account", inversedBy="tournaments", cascade={"remove"})
+    * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Account")
     * @ORM\JoinColumn(name="account_id", referencedColumnName="id")
     * @expose
     */
-    protected $accounts;
+    protected $account;
 
     /**
      * Get id
@@ -202,40 +202,6 @@ class Tournament
     }
 
     /**
-     * Add account
-     *
-     * @param \UserBundle\Entity\Account $account
-     *
-     * @return Tournament
-     */
-    public function addAccount(\UserBundle\Entity\Account $account)
-    {
-        $this->accounts[] = $account;
-
-        return $this;
-    }
-
-    /**
-     * Remove account
-     *
-     * @param \UserBundle\Entity\Account $account
-     */
-    public function removeAccount(\UserBundle\Entity\Account $account)
-    {
-        $this->accounts->removeElement($account);
-    }
-
-    /**
-     * Get accounts
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAccounts()
-    {
-        return $this->accounts;
-    }
-
-    /**
      * Set durationBetweenRound
      *
      * @param integer $durationBetweenRound
@@ -339,5 +305,29 @@ class Tournament
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Set account
+     *
+     * @param \UserBundle\Entity\Account $account
+     *
+     * @return Tournament
+     */
+    public function setAccount(\UserBundle\Entity\Account $account = null)
+    {
+        $this->account = $account;
+
+        return $this;
+    }
+
+    /**
+     * Get account
+     *
+     * @return \UserBundle\Entity\Account
+     */
+    public function getAccount()
+    {
+        return $this->account;
     }
 }

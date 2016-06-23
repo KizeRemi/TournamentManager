@@ -52,6 +52,13 @@ class TournamentController extends Controller implements ClassResourceInterface
 	public function postAction(ParamFetcherInterface $paramFetcher)
     {
 		$account = $this->getUser();
+
+        $inProgressTournament = $this->getDoctrine()->getRepository('CoreBundle:Tournament')->getByState($account->getId());
+        if($inProgressTournament > 0){
+            $resp = array("message" => "You already have a tournament in progress");
+            return new JsonResponse($resp, 200);
+        }
+
         $tournament = new Tournament();
         $tournament->setName($paramFetcher->get('name'));
         $tournament->setGame($paramFetcher->get('game'));
@@ -60,6 +67,7 @@ class TournamentController extends Controller implements ClassResourceInterface
         $tournament->setDurationBetweenRound($paramFetcher->get('duration_between_round'));
         $tournament->setPlayerMax(8);
         $tournament->setState(1);
+        $tournament->setAccount($account);
 	    $validator = $this->get("validator");
 
 	    $errors = $validator->validate($tournament);
