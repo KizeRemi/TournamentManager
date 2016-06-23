@@ -122,7 +122,7 @@ class TournamentController extends Controller implements ClassResourceInterface
     }
 
     /**
-     * subscribe a match
+     * register to a match
      *
      * @param ParamFetcherInterface $paramFetcher Contain all body parameters received
      * @return JsonResponse Return 201 and empty array if tournament was created OR 400 and error message JSON if error
@@ -136,7 +136,37 @@ class TournamentController extends Controller implements ClassResourceInterface
      *   }
      * )
      */
-	public function postSubscribeAction(ParamFetcherInterface $paramFetcher, Tournament $tournament)
+	public function postRegisterAction(ParamFetcherInterface $paramFetcher, Tournament $tournament)
+    {
+		$account = $this->getUser();
+
+       	$match = new Match();
+       	$tournament->addListAccount($account);
+
+	    
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($tournament);
+        $em->flush();
+
+        return new JsonResponse(null, JsonResponse::HTTP_CREATED);
+    }
+
+    /**
+     * get registered to tournaments
+     *
+     * @param ParamFetcherInterface $paramFetcher Contain all body parameters received
+     * @return JsonResponse Return 201 and empty array if tournament was created OR 400 and error message JSON if error
+     *
+     * @ApiDoc(
+     *  section="Tournaments",
+     *  description="get susb",
+     *  resource = true,
+     *  statusCodes = {
+     *     201 = "Returned when successful",
+     *   }
+     * )
+     */
+	public function getSignupAction(ParamFetcherInterface $paramFetcher, Tournament $tournament)
     {
 		$account = $this->getUser();
 
