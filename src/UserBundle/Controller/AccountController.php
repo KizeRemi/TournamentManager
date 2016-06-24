@@ -261,14 +261,14 @@ class AccountController extends Controller implements ClassResourceInterface
 
 	    $fileName = $this->get('user.images_uploader')->upload("img", $img);
 	    $account->setImg($fileName);
-
+	    $resp = array("filename" => "/accounts/images/".$fileName);
         $userManager = $this->get("fos_user.user_manager");
         $userManager->updateUser($account);
         $em = $this->getDoctrine()->getManager();
         $em->persist($account);
         $em->flush();
 
-	    return new JsonResponse(null, 201);
+	    return new JsonResponse($resp, 201);
     }
 
 	/**
@@ -304,13 +304,16 @@ class AccountController extends Controller implements ClassResourceInterface
 	    $fileName = $this->get('user.banners_uploader')->upload("banner", $banner);
 	    $account->setBanner($fileName);
 
+        $resp = array("message" => "/accounts/banners/".$fileName);
+        
+
         $userManager = $this->get("fos_user.user_manager");
         $userManager->updateUser($account);
         $em = $this->getDoctrine()->getManager();
         $em->persist($account);
         $em->flush();
 
-	    return new JsonResponse(null, 201);
+	    return new JsonResponse($resp, 201);
     }
 
     /**
@@ -356,7 +359,7 @@ class AccountController extends Controller implements ClassResourceInterface
     	
     	$em = $this->getDoctrine()->getRepository("UserBundle:Account");
 		$account = $em->find($account);
-
+		$account->setBanner("/accounts/banners/".$account->getBanner());
         return $account;
     }
     
