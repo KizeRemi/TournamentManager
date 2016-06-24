@@ -69,11 +69,13 @@ class Account extends BaseUser
 
     /**
      * @ORM\Column(name="name",type="string", length=25, nullable=true)
+     * @expose
      */
     protected $name;
 
     /**
      * @ORM\Column(name="lastname",type="string", length=25, nullable=true)
+     * @expose
      */
     protected $lastname;
 
