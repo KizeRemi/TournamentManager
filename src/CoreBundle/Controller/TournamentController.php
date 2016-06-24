@@ -150,7 +150,7 @@ class TournamentController extends Controller implements ClassResourceInterface
             $resp = array("message" => "You are already registered in this tournament");
             return new JsonResponse($resp, 200);
 		}
-       	$tournament->addAccount($account);
+       	$tournament->addAccount($account); 
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($tournament);
