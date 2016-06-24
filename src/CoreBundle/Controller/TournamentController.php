@@ -12,7 +12,7 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use JMS\Serializer\SerializerBuilder;
 use CoreBundle\Entity\Tournament;
-use CoreBundle\Entity\Match;
+use CoreBundle\Entity\Battle;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 /*
@@ -178,5 +178,61 @@ class TournamentController extends Controller implements ClassResourceInterface
 	public function getRegisterAction(ParamFetcherInterface $paramFetcher, Tournament $tournament)
     {
 		return $tournament->getAccounts();
+    }
+
+    /**
+     * Validate all registers for a tournament
+     *
+     * @param Tournament $tournament
+     * @param ParamFetcherInterface $paramFetcher Contain all body parameters received
+     * @return JsonResponse Return 201 and empty array if tournament was created OR 400 and error message JSON if error
+     *
+     * @ApiDoc(
+     *  section="Tournaments",
+     *  description="Validate registers for a tournament",
+     *  resource = true,
+     *  statusCodes = {
+     *     201 = "Returned when successful",
+     *     400 = "Returned when invalid tournament"
+     *   }
+     * )
+     */
+    public function postValidateAction(ParamFetcherInterface $paramFetcher, Tournament $tournament)
+    {
+        $account = $this->getUser();
+
+        if($account != $tournament->getAccount()){
+            $resp = array("message" => "this tournament is not yours");
+            return new JsonResponse($resp, 400);
+        };
+
+        $registers = $tournament->getAccounts($account);
+        if(count($registers) != 4){
+            $resp = array("message" => "This tournament cannot be validate");
+            return new JsonResponse($resp, 400);
+        }
+        $tournament->setState(2); 
+
+        $registers = $registers->toArray();
+        shuffle($registers);
+        $em = $this->getDoctrine()->getManager();
+        for($i=0;$i<4;$i++){
+            if($i%2 == 0){
+            $battle = new Battle();
+            $battle->setPlayerOne($registers[$i]);
+            $battle->setPlayerTwo($registers[$i+1]);
+            $battle->setResultPlayerOne(false);
+            $battle->setResultPlayerTwo(false);
+            $battle->setReadyPlayerOne(false);
+            $battle->setReadyPlayerTwo(false);   
+            $em->persist($battle);     
+            $em->flush($battle);
+            }
+        }
+        
+        $em->persist($tournament);
+        $em->flush($tournament);
+
+        return new JsonResponse(null, JsonResponse::HTTP_CREATED);
     }
 }

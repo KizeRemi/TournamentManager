@@ -10,21 +10,21 @@ use JMS\Serializer\Annotation\Expose;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Match Entity
+ * Battle Entity
  *
- * Match definition. Match details.
+ * Battle definition. Match details.
  *
  * @package     CoreBundle\Controller
  * @category    classes
  * @author      Mavillaz Remi <remi.mavillaz@live.fr>
  *
- * @ORM\Table(name="match")
+ * @ORM\Table(name="battle")
  * @ORM\Entity(repositoryClass="UserBundle\Repository\MatchRepository")
  * @ExclusionPolicy("all")
  *
  */
 
-class Match
+class Battle
 {	
 
     use TimestampableEntity;
