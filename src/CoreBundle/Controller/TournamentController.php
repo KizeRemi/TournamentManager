@@ -205,7 +205,10 @@ class TournamentController extends Controller implements ClassResourceInterface
             $resp = array("message" => "this tournament is not yours");
             return new JsonResponse($resp, 400);
         };
-
+        if($tournament->getState() != "Ouvert"){
+            $resp = array("message" => "this tournament is already validate");
+            return new JsonResponse($resp, 400);      
+        }
         $registers = $tournament->getAccounts($account);
         if(count($registers) != 4){
             $resp = array("message" => "This tournament cannot be validate");

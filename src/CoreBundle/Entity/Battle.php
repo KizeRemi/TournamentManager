@@ -39,12 +39,14 @@ class Battle
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="UserBundle\Entity\Account", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Account", cascade={"persist"})
+     * @ORM\JoinColumn(name="player_one_id", referencedColumnName="id")
      */
     private $playerOne;
 
     /**
-     * @ORM\OneToOne(targetEntity="UserBundle\Entity\Account", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Account", cascade={"persist"})
+     * @ORM\JoinColumn(name="player_two_id", referencedColumnName="id")
      */
     private $playerTwo;
 
@@ -228,5 +230,61 @@ class Battle
     public function getResultPlayerTwo()
     {
         return $this->resultPlayerTwo;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->playerOne = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->playerTwo = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add playerOne
+     *
+     * @param \UserBundle\Entity\Account $playerOne
+     *
+     * @return Battle
+     */
+    public function addPlayerOne(\UserBundle\Entity\Account $playerOne)
+    {
+        $this->playerOne[] = $playerOne;
+
+        return $this;
+    }
+
+    /**
+     * Remove playerOne
+     *
+     * @param \UserBundle\Entity\Account $playerOne
+     */
+    public function removePlayerOne(\UserBundle\Entity\Account $playerOne)
+    {
+        $this->playerOne->removeElement($playerOne);
+    }
+
+    /**
+     * Add playerTwo
+     *
+     * @param \UserBundle\Entity\Account $playerTwo
+     *
+     * @return Battle
+     */
+    public function addPlayerTwo(\UserBundle\Entity\Account $playerTwo)
+    {
+        $this->playerTwo[] = $playerTwo;
+
+        return $this;
+    }
+
+    /**
+     * Remove playerTwo
+     *
+     * @param \UserBundle\Entity\Account $playerTwo
+     */
+    public function removePlayerTwo(\UserBundle\Entity\Account $playerTwo)
+    {
+        $this->playerTwo->removeElement($playerTwo);
     }
 }
