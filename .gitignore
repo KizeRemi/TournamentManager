@@ -9,6 +9,7 @@
 /composer.phar
 /vendor/
 /web/bundles/
+/var/jwt/*.pem
 /app/var/jwt/*.pem
 /var/cache/*
 /web/accounts/*
