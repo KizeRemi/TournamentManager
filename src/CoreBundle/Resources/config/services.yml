@@ -21,8 +21,3 @@ services:
     user.manage_experience:
         class: CoreBundle\Service\SetExperience
         arguments: ['@doctrine.orm.entity_manager']
-    corebundle.repository.experience:
-        class: CoreBundle\Entity\LevelRepository
-        factory_service: doctrine.orm.default_entity_manager
-        factory_method: getRepository
-        arguments: ['CoreBundle:Level']
