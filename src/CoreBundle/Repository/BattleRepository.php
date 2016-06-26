@@ -10,4 +10,17 @@ namespace CoreBundle\Repository;
  */
 class BattleRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function getByNumberAndTournament($number, $tournament, $round)
+	{
+		$query = $this->createQueryBuilder('b')
+			->select('b')
+			->setParameter('number', $number)
+			->setParameter('tournament', $tournament)
+			->setParameter('round', $round)
+			->where('b.number = :number')
+			->AndWhere('b.tournament = :tournament')
+			->AndWhere('b.round = :round')
+			->getQuery();
+		return $query->getSingleResult();
+	}
 }
