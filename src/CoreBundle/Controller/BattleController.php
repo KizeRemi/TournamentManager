@@ -61,7 +61,10 @@ class BattleController extends Controller implements ClassResourceInterface
             $resp = array("message" => "You can't win a battle if the 2 players are not ready ");
             return new JsonResponse($resp, 400);      
         }
-
+        if($battle->getWinner() != null){
+            $resp = array("message" => "The user ".$battle->getWinner()->getNickname()." has already winning. Send a message to organisator for contest");
+            return new JsonResponse($resp, 400);   
+        }
         $battle->setWinner($account);
 
         if($battle->getNumber() %2 == 0){

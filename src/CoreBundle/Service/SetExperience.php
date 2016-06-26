@@ -29,7 +29,6 @@ class SetExperience
 			$account->setCurrentExp($currentExperience+$experience);
 		}
 
-
         $this->em->persist($account);
         $this->em->flush();
 
