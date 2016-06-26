@@ -69,6 +69,12 @@ class Tournament
     protected $playerMax;
 
     /**
+     * @ORM\Column(name="description",type="text", nullable=true)
+     * @expose
+     */
+    protected $description;
+
+    /**
      * @var string Tournament state
      *
      * @ORM\Column(name="state", type="string", length=15, columnDefinition="enum('Ouvert','Complet', 'En cours', 'Terminé')")
@@ -306,5 +312,29 @@ class Tournament
     public function getAccount()
     {
         return $this->account;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Tournament
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }

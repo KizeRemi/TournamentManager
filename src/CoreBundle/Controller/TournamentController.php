@@ -100,6 +100,39 @@ class TournamentController extends Controller implements ClassResourceInterface
     {
         return $tournament;
     }
+
+   /**
+     * Update a tournament
+     * @return JsonResponse Return 200 and Account array if account was founded OR 404 and error message JSON if error
+     *
+     * @ApiDoc(
+     *  section="Tournaments",
+     *  description="Get choosen tournament",
+     *  resource = true,
+     *  statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when tournament is not yours"
+     *   }
+     * )
+     * @FOSRest\RequestParam(name="description", nullable=true, description="Tournament's description")
+     * @FOSRest\RequestParam(name="date_begin", requirements=@CoreBundle\Validator\Constraints\Date, nullable=false, description="Tournament's begin date")
+     * @Security("has_role('ROLE_USER')")
+    */
+    public function patchAction(ParamFetcherInterface $paramFetcher,Tournament $tournament)
+    {
+        $account = $this->getUser();
+
+        if($tournament->getAccount() != $account){
+            $resp = array("message" => "this tournament is not yours");
+            return new JsonResponse($resp, 400);
+        }
+
+        $tournament->setDescription($paramFetcher->get('description'));
+        $dateBegin = new \DateTime($paramFetcher->get('date_begin'));
+        $tournament->setDateBegin($dateBegin);
+        return $tournament;
+    }
+
    /**
      * Get all tournaments
      * @return JsonResponse Return 200 and Account array if account was founded OR 404 and error message JSON if error
@@ -143,7 +176,7 @@ class TournamentController extends Controller implements ClassResourceInterface
 		$account = $this->getUser();
 
 		$registers = $tournament->getAccounts($account);
-		if(count($registers) >= 8){
+		if(count($registers) >= $tournament->getPlayerMax()){
             $resp = array("message" => "this tournament already has the maximum number of required players");
             return new JsonResponse($resp, 200);
 		};
