@@ -13,3 +13,8 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
         tags:
            - { name: kernel.event_subscriber }
+    tournament.nextmatch_listener:
+        class: CoreBundle\EventListener\NextMatchListener
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+           - { name: kernel.event_subscriber }

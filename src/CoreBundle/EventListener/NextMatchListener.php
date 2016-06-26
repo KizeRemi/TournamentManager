@@ -2,11 +2,11 @@
 namespace CoreBundle\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use CoreBundle\Event\BattleEvent;
+use CoreBundle\Event\NextMatchEvent;
 use Doctrine\ORM\EntityManager;
 use CoreBundle\Entity\Battle;
 
-class BattleListener implements EventSubscriberInterface
+class NextMatchListener implements EventSubscriberInterface
 {
 	private $em;
 
@@ -19,31 +19,24 @@ class BattleListener implements EventSubscriberInterface
     {
         // Liste des évènements écoutés et méthodes à appeler
         return array(
-           BattleEvent::NAME => 'initialize'
+           NextMatchEvent::NAME => 'create'
         );
     }
 
-    public function initialize(BattleEvent $event)
+    public function create(NextMatchEvent $event)
     {
-        $registers = $event->getRegisters();
-        $tournament = $event->getTournament();
-        shuffle($registers);
-        $j = 1;
-        for($i=0;$i<$tournament->getPlayerMax();$i++){
-            if($i%2 == 0){
+
+        if($event->getBattleTwo()->getWinner() != null && $event->getBattleOne()->getWinner() != null){
             $battle = new Battle();
-            $battle->setPlayerOne($registers[$i]);
-            $battle->setPlayerTwo($registers[$i+1]);
+            $battle->setPlayerOne($event->getBattleOne()->getWinner());
+            $battle->setPlayerTwo($event->getBattleTwo()->getWinner());
             $battle->setReadyPlayerOne(false);
             $battle->setReadyPlayerTwo(false); 
-            $battle->setNumber($j);
-            $battle->setround($tournament->getPlayerMax()/2);
-            $battle->setTournament($tournament);  
+            $battle->setNumber($event->getBattleTwo()->getNumber()/2);
+            $battle->setRound($event->getBattleTwo()->getRound()/2);
+            $battle->setTournament($event->getBattleTwo()->getTournament());  
             $this->em->persist($battle);     
             $this->em->flush($battle);
-            $j++;
-            }
-
         }
     }
 }

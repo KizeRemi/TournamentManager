@@ -121,7 +121,7 @@ class Account extends BaseUser
     protected $banner;
 
     /**
-    * @ORM\OneToMany(targetEntity="CoreBundle\Entity\Tournament", mappedBy="Account", cascade={"remove", "persist"})
+    * @ORM\OneToMany(targetEntity="CoreBundle\Entity\Tournament", mappedBy="Accounts", cascade={"remove", "persist"})
     */
     protected $tournaments;
 

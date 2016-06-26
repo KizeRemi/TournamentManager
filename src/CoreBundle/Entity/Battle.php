@@ -35,18 +35,21 @@ class Battle
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @expose
      */
     protected $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Account", cascade={"persist"})
      * @ORM\JoinColumn(name="player_one_id", referencedColumnName="id")
+     * @expose
      */
     private $playerOne;
 
     /**
      * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Account", cascade={"persist"})
      * @ORM\JoinColumn(name="player_two_id", referencedColumnName="id")
+     * @expose
      */
     private $playerTwo;
 
@@ -54,6 +57,7 @@ class Battle
      * @var bool Match playerOne ready
      *
      * @ORM\Column(name="ready_player_one", type="boolean")
+     * @expose
      */
     private $readyPlayerOne;
 
@@ -61,28 +65,34 @@ class Battle
      * @var bool Match playerTwo ready
      *
      * @ORM\Column(name="ready_player_two", type="boolean")
+     * @expose
      */
     private $readyPlayerTwo;
 
     /**
-     * @var bool Match playerOne result
-     *
-     * @ORM\Column(name="result_player_one", type="boolean")
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\Account", cascade={"persist"})
+     * @ORM\JoinColumn(name="winner_id", referencedColumnName="id")
+     * @expose
      */
-    private $resultPlayerOne;
-
-    /**
-     * @var bool Match playerOne result
-     *
-     * @ORM\Column(name="result_player_two", type="boolean")
-     */
-    private $resultPlayerTwo;
+    private $winner;
 
     /**
      * @ORM\ManyToOne(targetEntity="CoreBundle\Entity\Tournament", cascade={"persist"})
      * @ORM\JoinColumn(name="tournament_id", referencedColumnName="id")
      */
     private $tournament;
+
+    /**
+     * @ORM\Column(name="number",type="integer", length=25, nullable=false)
+     * @expose
+     */
+    protected $number;
+
+    /**
+     * @ORM\Column(name="round",type="integer", length=25, nullable=false)
+     * @expose
+     */
+    protected $round;
     /**
      * Get id
      *
@@ -94,59 +104,11 @@ class Battle
     }
 
     /**
-     * Set playerOne
-     *
-     * @param \UserBundle\Entity\Account $playerOne
-     *
-     * @return Match
-     */
-    public function setPlayerOne(\UserBundle\Entity\Account $playerOne = null)
-    {
-        $this->playerOne = $playerOne;
-
-        return $this;
-    }
-
-    /**
-     * Get playerOne
-     *
-     * @return \UserBundle\Entity\Account
-     */
-    public function getPlayerOne()
-    {
-        return $this->playerOne;
-    }
-
-    /**
-     * Set playerTwo
-     *
-     * @param \UserBundle\Entity\Account $playerTwo
-     *
-     * @return Match
-     */
-    public function setPlayerTwo(\UserBundle\Entity\Account $playerTwo = null)
-    {
-        $this->playerTwo = $playerTwo;
-
-        return $this;
-    }
-
-    /**
-     * Get playerTwo
-     *
-     * @return \UserBundle\Entity\Account
-     */
-    public function getPlayerTwo()
-    {
-        return $this->playerTwo;
-    }
-
-    /**
      * Set readyPlayerOne
      *
      * @param boolean $readyPlayerOne
      *
-     * @return Match
+     * @return Battle
      */
     public function setReadyPlayerOne($readyPlayerOne)
     {
@@ -170,7 +132,7 @@ class Battle
      *
      * @param boolean $readyPlayerTwo
      *
-     * @return Match
+     * @return Battle
      */
     public function setReadyPlayerTwo($readyPlayerTwo)
     {
@@ -190,107 +152,51 @@ class Battle
     }
 
     /**
-     * Set resultPlayerOne
-     *
-     * @param boolean $resultPlayerOne
-     *
-     * @return Match
-     */
-    public function setResultPlayerOne($resultPlayerOne)
-    {
-        $this->resultPlayerOne = $resultPlayerOne;
-
-        return $this;
-    }
-
-    /**
-     * Get resultPlayerOne
-     *
-     * @return boolean
-     */
-    public function getResultPlayerOne()
-    {
-        return $this->resultPlayerOne;
-    }
-
-    /**
-     * Set resultPlayerTwo
-     *
-     * @param boolean $resultPlayerTwo
-     *
-     * @return Match
-     */
-    public function setResultPlayerTwo($resultPlayerTwo)
-    {
-        $this->resultPlayerTwo = $resultPlayerTwo;
-
-        return $this;
-    }
-
-    /**
-     * Get resultPlayerTwo
-     *
-     * @return boolean
-     */
-    public function getResultPlayerTwo()
-    {
-        return $this->resultPlayerTwo;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->playerOne = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->playerTwo = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add playerOne
+     * Set playerOne
      *
      * @param \UserBundle\Entity\Account $playerOne
      *
      * @return Battle
      */
-    public function addPlayerOne(\UserBundle\Entity\Account $playerOne)
+    public function setPlayerOne(\UserBundle\Entity\Account $playerOne = null)
     {
-        $this->playerOne[] = $playerOne;
+        $this->playerOne = $playerOne;
 
         return $this;
     }
 
     /**
-     * Remove playerOne
+     * Get playerOne
      *
-     * @param \UserBundle\Entity\Account $playerOne
+     * @return \UserBundle\Entity\Account
      */
-    public function removePlayerOne(\UserBundle\Entity\Account $playerOne)
+    public function getPlayerOne()
     {
-        $this->playerOne->removeElement($playerOne);
+        return $this->playerOne;
     }
 
     /**
-     * Add playerTwo
+     * Set playerTwo
      *
      * @param \UserBundle\Entity\Account $playerTwo
      *
      * @return Battle
      */
-    public function addPlayerTwo(\UserBundle\Entity\Account $playerTwo)
+    public function setPlayerTwo(\UserBundle\Entity\Account $playerTwo = null)
     {
-        $this->playerTwo[] = $playerTwo;
+        $this->playerTwo = $playerTwo;
 
         return $this;
     }
 
     /**
-     * Remove playerTwo
+     * Get playerTwo
      *
-     * @param \UserBundle\Entity\Account $playerTwo
+     * @return \UserBundle\Entity\Account
      */
-    public function removePlayerTwo(\UserBundle\Entity\Account $playerTwo)
+    public function getPlayerTwo()
     {
-        $this->playerTwo->removeElement($playerTwo);
+        return $this->playerTwo;
     }
 
     /**
@@ -315,5 +221,77 @@ class Battle
     public function getTournament()
     {
         return $this->tournament;
+    }
+
+    /**
+     * Set winner
+     *
+     * @param \UserBundle\Entity\Account $winner
+     *
+     * @return Battle
+     */
+    public function setWinner(\UserBundle\Entity\Account $winner = null)
+    {
+        $this->winner = $winner;
+
+        return $this;
+    }
+
+    /**
+     * Get winner
+     *
+     * @return \UserBundle\Entity\Account
+     */
+    public function getWinner()
+    {
+        return $this->winner;
+    }
+
+    /**
+     * Set number
+     *
+     * @param integer $number
+     *
+     * @return Battle
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
+
+        return $this;
+    }
+
+    /**
+     * Get number
+     *
+     * @return integer
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * Set round
+     *
+     * @param integer $round
+     *
+     * @return Battle
+     */
+    public function setRound($round)
+    {
+        $this->round = $round;
+
+        return $this;
+    }
+
+    /**
+     * Get round
+     *
+     * @return integer
+     */
+    public function getRound()
+    {
+        return $this->round;
     }
 }

@@ -15,7 +15,7 @@ use CoreBundle\Entity\Tournament;
 use CoreBundle\Entity\Battle;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use CoreBundle\Event\BattleEvent;
+use CoreBundle\Event\NextMatchEvent;
 /*
 * Class BattleController
 *
@@ -45,12 +45,14 @@ class BattleController extends Controller implements ClassResourceInterface
      *     400 = "Returned when invalid tournament"
      *   }
      * )
-     * @FOSRest\Post("/battle/{id}/win")
+     * @FOSRest\Post("/battle/{battle}/win")
      */
     public function postWinAction(ParamFetcherInterface $paramFetcher, Battle $battle)
     {
         $account = $this->getUser();
-
+        $tournament = $battle->getTournament();
+        $round = $battle->getRound();
+        var_dump($round);
         if($account != $battle->getPlayerOne() && $account != $battle->getPlayerTwo()){
             $resp = array("message" => "this battle is not yours");
             return new JsonResponse($resp, 400);
@@ -61,10 +63,16 @@ class BattleController extends Controller implements ClassResourceInterface
             return new JsonResponse($resp, 400);      
         }
 
-        if($account == $battle->getPlayerOne()){
-            $battle->setResultPlayerOne(true);
-        } else {
-            $battle->setResultPlayerTwo(true);
+        $battle->setWinner($account);
+
+        if($battle->getNumber() %2 == 0){
+            $number = $battle->getNumber()-1;
+            $battleTwo = $this->getDoctrine()->getRepository('CoreBundle:Battle')->getByNumberAndTournament($number, $tournament, $round);
+            $this->get("event_dispatcher")->dispatch(NextMatchEvent::NAME, new NextMatchEvent($battleTwo, $battle));
+        } else{
+            $number = $battle->getNumber()-1;
+            $battleTwo = $this->getDoctrine()->getRepository('CoreBundle:Battle')->getByNumberAndTournament($number, $tournament, $round);
+            $this->get("event_dispatcher")->dispatch(NextMatchEvent::NAME, new NextMatchEvent($battle, $battleTwo));
         }
 
         $em = $this->getDoctrine()->getManager();
@@ -90,9 +98,9 @@ class BattleController extends Controller implements ClassResourceInterface
      *     400 = "Returned when invalid tournament"
      *   }
      * )
-     * @FOSRest\Post("/battle/{id}/ready")
+     * @FOSRest\Post("/battle/{battle}/ready")
      */
-    public function postReadyAction(ParamFetcherInterface $paramFetcher, Battle $battle)
+    public function postReadyAction(Battle $battle)
     {
         $account = $this->getUser();
 
@@ -112,5 +120,25 @@ class BattleController extends Controller implements ClassResourceInterface
         $em->flush($battle);
 
         return new JsonResponse(null, JsonResponse::HTTP_CREATED);
+    }
+    /**
+     * Get a winner for a battle
+     * @return JsonResponse Return 200 and winner array if account was founded OR 404 and error message JSON if error
+     *
+     * @ApiDoc(
+     *  section="Battles",
+     *  description="Get a winner for a battle",
+     *  resource = true,
+     *  statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when battle is not found"
+     *   }
+     * )
+     * @FOSRest\Get("/battle/{battle}/winner")
+     * @Security("has_role('ROLE_USER')")
+    */
+    public function getWinnerAction(Battle $battle)
+    {
+        return $battle->getWinner();
     }
 }

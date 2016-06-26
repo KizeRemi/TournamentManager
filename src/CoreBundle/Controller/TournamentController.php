@@ -226,4 +226,26 @@ class TournamentController extends Controller implements ClassResourceInterface
 
         return new JsonResponse(null, JsonResponse::HTTP_CREATED);
     }
+
+   /**
+     * Get all battles for a tournament
+     * @return JsonResponse Return 200 and Account array if account was founded OR 404 and error message JSON if error
+     *
+     * @ApiDoc(
+     *  section="Tournaments",
+     *  description="Get choosen tournament",
+     *  resource = true,
+     *  statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when tournament is not found"
+     *   }
+     * )
+     * @Security("has_role('ROLE_USER')")
+    */
+    public function getBattlesAction(Tournament $tournament)
+    {
+        $em = $this->getDoctrine()->getRepository("CoreBundle:Battle");
+        $battles = $em->findByTournament($tournament);
+        return $battles;
+    }
 }

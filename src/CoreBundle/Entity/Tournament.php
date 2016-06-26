@@ -88,6 +88,13 @@ class Tournament
     * @expose
     */
     protected $account;
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->accounts = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -172,37 +179,6 @@ class Tournament
     }
 
     /**
-     * Set playerMax
-     *
-     * @param \integer $playerMax
-     *
-     * @return Tournament
-     */
-    public function setPlayerMax($playerMax)
-    {
-        $this->playerMax = $playerMax;
-
-        return $this;
-    }
-
-    /**
-     * Get playerMax
-     *
-     * @return \integer
-     */
-    public function getPlayerMax()
-    {
-        return $this->playerMax;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->accounts = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
      * Set durationBetweenRound
      *
      * @param integer $durationBetweenRound
@@ -227,6 +203,30 @@ class Tournament
     }
 
     /**
+     * Set playerMax
+     *
+     * @param integer $playerMax
+     *
+     * @return Tournament
+     */
+    public function setPlayerMax($playerMax)
+    {
+        $this->playerMax = $playerMax;
+
+        return $this;
+    }
+
+    /**
+     * Get playerMax
+     *
+     * @return integer
+     */
+    public function getPlayerMax()
+    {
+        return $this->playerMax;
+    }
+
+    /**
      * Set state
      *
      * @param string $state
@@ -248,54 +248,6 @@ class Tournament
     public function getState()
     {
         return $this->state;
-    }
-
-    /**
-     * Set createdBy
-     *
-     * @param \UserBundle\Entity\Account $createdBy
-     *
-     * @return Tournament
-     */
-    public function setCreatedBy(\UserBundle\Entity\Account $createdBy = null)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get createdBy
-     *
-     * @return \UserBundle\Entity\Account
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set account
-     *
-     * @param \UserBundle\Entity\Account $account
-     *
-     * @return Tournament
-     */
-    public function setAccount(\UserBundle\Entity\Account $account = null)
-    {
-        $this->account = $account;
-
-        return $this;
-    }
-
-    /**
-     * Get account
-     *
-     * @return \UserBundle\Entity\Account
-     */
-    public function getAccount()
-    {
-        return $this->account;
     }
 
     /**
@@ -330,5 +282,29 @@ class Tournament
     public function getAccounts()
     {
         return $this->accounts;
+    }
+
+    /**
+     * Set account
+     *
+     * @param \UserBundle\Entity\Account $account
+     *
+     * @return Tournament
+     */
+    public function setAccount(\UserBundle\Entity\Account $account = null)
+    {
+        $this->account = $account;
+
+        return $this;
+    }
+
+    /**
+     * Get account
+     *
+     * @return \UserBundle\Entity\Account
+     */
+    public function getAccount()
+    {
+        return $this->account;
     }
 }
