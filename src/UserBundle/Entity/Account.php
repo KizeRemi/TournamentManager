@@ -126,6 +126,19 @@ class Account extends BaseUser
     protected $tournaments;
 
     /**
+     * @ORM\ManyToOne(targetEntity="CoreBundle\Entity\Level", cascade={"persist"})
+     * @ORM\JoinColumn(name="level_id", referencedColumnName="id")
+     * @expose
+     */
+    private $level;
+
+    /**
+     * @ORM\Column(name="current_exp",type="integer", length=25, nullable=false)
+     * @expose
+     */
+    protected $currentExp;
+
+    /**
      * Account constructor
      */
     public function __construct()
@@ -477,5 +490,53 @@ class Account extends BaseUser
     public function getTournaments()
     {
         return $this->tournaments;
+    }
+
+    /**
+     * Set currentExp
+     *
+     * @param integer $currentExp
+     *
+     * @return Account
+     */
+    public function setCurrentExp($currentExp)
+    {
+        $this->currentExp = $currentExp;
+
+        return $this;
+    }
+
+    /**
+     * Get currentExp
+     *
+     * @return integer
+     */
+    public function getCurrentExp()
+    {
+        return $this->currentExp;
+    }
+
+    /**
+     * Set level
+     *
+     * @param \CoreBundle\Entity\Level $level
+     *
+     * @return Account
+     */
+    public function setLevel(\CoreBundle\Entity\Level $level = null)
+    {
+        $this->level = $level;
+
+        return $this;
+    }
+
+    /**
+     * Get level
+     *
+     * @return \CoreBundle\Entity\Level
+     */
+    public function getLevel()
+    {
+        return $this->level;
     }
 }

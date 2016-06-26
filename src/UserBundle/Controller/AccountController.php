@@ -14,8 +14,7 @@ use UserBundle\Entity\Account;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use UserBundle\Entity\Association;
-use UserBundle\Entity\User;
+use CoreBundle\Entity\Experience;
 use UserBundle\Event\RegistrationEvent;
 use UserBundle\Event\ResetPasswordEvent;
 use FOS\UserBundle\Event\FormEvent;
@@ -63,11 +62,15 @@ class AccountController extends Controller implements ClassResourceInterface
             $resp = array("message" => "Password and confirmation password doesn't match");
             return new JsonResponse($resp, JsonResponse::HTTP_BAD_REQUEST);
         }
+        $em = $this->getDoctrine()->getRepository("CoreBundle:Level");
+        $level = $em->findOneByLevel(1);
 
         $account = new Account();
         $account->setEmail($paramFetcher->get('email'));
         $account->setNickname($paramFetcher->get('nickname'));
         $account->setPlainPassword($paramFetcher->get('password'));
+        $account->setLevel($level);
+		$account->setCurrentExp(0);
 	    $validator = $this->get("validator");
 	    $errors = $validator->validate($account);
 	    if(count($errors) > 0){

@@ -52,7 +52,6 @@ class BattleController extends Controller implements ClassResourceInterface
         $account = $this->getUser();
         $tournament = $battle->getTournament();
         $round = $battle->getRound();
-        var_dump($round);
         if($account != $battle->getPlayerOne() && $account != $battle->getPlayerTwo()){
             $resp = array("message" => "this battle is not yours");
             return new JsonResponse($resp, 400);
@@ -74,6 +73,7 @@ class BattleController extends Controller implements ClassResourceInterface
             $battleTwo = $this->getDoctrine()->getRepository('CoreBundle:Battle')->getByNumberAndTournament($number, $tournament, $round);
             $this->get("event_dispatcher")->dispatch(NextMatchEvent::NAME, new NextMatchEvent($battle, $battleTwo));
         }
+        $this->get('user.manage_experience')->setExperienceToAccount($account, "50");
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($battle);

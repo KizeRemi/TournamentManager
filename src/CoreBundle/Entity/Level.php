@@ -10,21 +10,21 @@ use JMS\Serializer\Annotation\Expose;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Experience Entity
+ * Level Entity
  *
- * Experience definition. Experience details.
+ * Level definition. Level details.
  *
  * @package     CoreBundle\Controller
  * @category    classes
  * @author      Mavillaz Remi <remi.mavillaz@live.fr>
  *
- * @ORM\Table(name="experience")
- * @ORM\Entity(repositoryClass="CoreBundle\Repository\BattleRepository")
+ * @ORM\Table(name="level")
+ * @ORM\Entity(repositoryClass="CoreBundle\Repository\LevelRepository")
  * @ExclusionPolicy("all")
  *
  */
 
-class Experience
+class Level
 {	
 	/**
      * @var int
