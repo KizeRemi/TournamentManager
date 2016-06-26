@@ -5,3 +5,6 @@ default:
 tournament:
     type:     rest
     resource: CoreBundle\Controller\TournamentController
+battle:
+    type:     rest
+    resource: CoreBundle\Controller\BattleController

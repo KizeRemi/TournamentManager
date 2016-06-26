@@ -19,7 +19,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @author      Mavillaz Remi <remi.mavillaz@live.fr>
  *
  * @ORM\Table(name="battle")
- * @ORM\Entity(repositoryClass="UserBundle\Repository\MatchRepository")
+ * @ORM\Entity(repositoryClass="CoreBundle\Repository\BattleRepository")
  * @ExclusionPolicy("all")
  *
  */
