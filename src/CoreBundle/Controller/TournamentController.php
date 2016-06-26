@@ -15,6 +15,7 @@ use CoreBundle\Entity\Tournament;
 use CoreBundle\Entity\Battle;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use CoreBundle\Event\BattleEvent;
 /*
 * Class TournamentController
 *
@@ -210,29 +211,16 @@ class TournamentController extends Controller implements ClassResourceInterface
             return new JsonResponse($resp, 400);      
         }
         $registers = $tournament->getAccounts($account);
-        if(count($registers) != 4){
+        $playerMax = $tournament->getPlayerMax();
+        if(count($registers) != $playerMax){
             $resp = array("message" => "This tournament cannot be validate");
             return new JsonResponse($resp, 400);
         }
         $tournament->setState(2); 
 
         $registers = $registers->toArray();
-        shuffle($registers);
+        $this->get("event_dispatcher")->dispatch(BattleEvent::NAME, new BattleEvent($registers, $tournament));
         $em = $this->getDoctrine()->getManager();
-        for($i=0;$i<4;$i++){
-            if($i%2 == 0){
-            $battle = new Battle();
-            $battle->setPlayerOne($registers[$i]);
-            $battle->setPlayerTwo($registers[$i+1]);
-            $battle->setResultPlayerOne(false);
-            $battle->setResultPlayerTwo(false);
-            $battle->setReadyPlayerOne(false);
-            $battle->setReadyPlayerTwo(false);   
-            $em->persist($battle);     
-            $em->flush($battle);
-            }
-        }
-        
         $em->persist($tournament);
         $em->flush($tournament);
 

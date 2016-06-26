@@ -79,6 +79,11 @@ class Battle
     private $resultPlayerTwo;
 
     /**
+     * @ORM\ManyToOne(targetEntity="CoreBundle\Entity\Tournament", cascade={"persist"})
+     * @ORM\JoinColumn(name="tournament_id", referencedColumnName="id")
+     */
+    private $tournament;
+    /**
      * Get id
      *
      * @return integer
@@ -286,5 +291,29 @@ class Battle
     public function removePlayerTwo(\UserBundle\Entity\Account $playerTwo)
     {
         $this->playerTwo->removeElement($playerTwo);
+    }
+
+    /**
+     * Set tournament
+     *
+     * @param \CoreBundle\Entity\Tournament $tournament
+     *
+     * @return Battle
+     */
+    public function setTournament(\CoreBundle\Entity\Tournament $tournament = null)
+    {
+        $this->tournament = $tournament;
+
+        return $this;
+    }
+
+    /**
+     * Get tournament
+     *
+     * @return \CoreBundle\Entity\Tournament
+     */
+    public function getTournament()
+    {
+        return $this->tournament;
     }
 }

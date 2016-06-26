@@ -8,3 +8,8 @@ services:
     user.banners_uploader:
         class: CoreBundle\Service\FileUploader
         arguments: ['%accounts_banners_directory%']
+    tournament.battle_listener:
+        class: CoreBundle\EventListener\BattleListener
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+           - { name: kernel.event_subscriber }
