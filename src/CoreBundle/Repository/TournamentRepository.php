@@ -20,4 +20,15 @@ class TournamentRepository extends \Doctrine\ORM\EntityRepository
 			->getQuery();
 		return $query->getSingleScalarResult();
 	}
+
+	public function findCurrentTournamentForAccount($account_id)
+	{
+		$query = $this->createQueryBuilder('t')
+			->select('t')
+			->setParameter('account_id', $account_id)
+			->where('t.account = :account_id')
+			->AndWhere('t.state != 4')
+			->getQuery();
+		return $query->getSingleResult();
+	}
 }

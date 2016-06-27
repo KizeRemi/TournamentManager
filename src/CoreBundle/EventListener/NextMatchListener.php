@@ -31,7 +31,6 @@ class NextMatchListener implements EventSubscriberInterface
             $round = $event->getBattleTwo()->getRound()/2;
             $number = $event->getBattleTwo()->getNumber()/2;
             $battle = $this->em->getRepository('CoreBundle:Battle')->getByNumberAndTournament($number, $tournament, $round);
-            
             $battle->setPlayerOne($event->getBattleOne()->getWinner());
             $battle->setPlayerTwo($event->getBattleTwo()->getWinner());
             $battle->setReadyPlayerOne(false);
