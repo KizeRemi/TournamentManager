@@ -72,7 +72,7 @@ class BattleController extends Controller implements ClassResourceInterface
             $battleTwo = $this->getDoctrine()->getRepository('CoreBundle:Battle')->getByNumberAndTournament($number, $tournament, $round);
             $this->get("event_dispatcher")->dispatch(NextMatchEvent::NAME, new NextMatchEvent($battleTwo, $battle));
         } else{
-            $number = $battle->getNumber()-1;
+            $number = $battle->getNumber()+1;
             $battleTwo = $this->getDoctrine()->getRepository('CoreBundle:Battle')->getByNumberAndTournament($number, $tournament, $round);
             $this->get("event_dispatcher")->dispatch(NextMatchEvent::NAME, new NextMatchEvent($battle, $battleTwo));
         }

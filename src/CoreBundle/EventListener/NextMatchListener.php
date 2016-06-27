@@ -27,14 +27,15 @@ class NextMatchListener implements EventSubscriberInterface
     {
 
         if($event->getBattleTwo()->getWinner() != null && $event->getBattleOne()->getWinner() != null){
-            $battle = new Battle();
+            $tournament = $event->getBattleTwo()->getTournament();
+            $round = $event->getBattleTwo()->getRound()/2;
+            $number = $event->getBattleTwo()->getNumber()/2;
+            $battle = $this->em->getRepository('CoreBundle:Battle')->getByNumberAndTournament($number, $tournament, $round);
+            
             $battle->setPlayerOne($event->getBattleOne()->getWinner());
             $battle->setPlayerTwo($event->getBattleTwo()->getWinner());
             $battle->setReadyPlayerOne(false);
             $battle->setReadyPlayerTwo(false); 
-            $battle->setNumber($event->getBattleTwo()->getNumber()/2);
-            $battle->setRound($event->getBattleTwo()->getRound()/2);
-            $battle->setTournament($event->getBattleTwo()->getTournament());  
             $this->em->persist($battle);     
             $this->em->flush($battle);
         }
