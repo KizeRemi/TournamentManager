@@ -1,7 +1,7 @@
 <?php
 
 namespace CoreBundle\Repository;
-
+use UserBundle\Entity\Account;
 /**
  * TournamentRepository
  *
@@ -31,4 +31,16 @@ class TournamentRepository extends \Doctrine\ORM\EntityRepository
 			->getQuery();
 		return $query->getSingleResult();
 	}
+
+	public function getRegisteredTournamentForAccount($account_id)
+	{
+		$query = $this->createQueryBuilder('t')
+			->select('t')
+            ->leftJoin('t.accounts', 'a')
+            ->setParameter('account_id', $account_id)
+		    ->where('a.id = :account_id')
+		    ->AndWhere('t.state != 4')
+		    ->getQuery();
+		return $query->getResult();
+	}	
 }

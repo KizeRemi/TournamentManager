@@ -20,6 +20,8 @@ class AppKernel extends Kernel
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new FOS\RestBundle\FOSRestBundle(),
             new FOS\UserBundle\FOSUserBundle(),
+            new Nelmio\CorsBundle\NelmioCorsBundle(),
+            new Endroid\Bundle\GcmBundle\EndroidGcmBundle(),
             new UserBundle\UserBundle(),
             new CoreBundle\CoreBundle(),
         ];

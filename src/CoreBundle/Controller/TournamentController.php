@@ -306,4 +306,27 @@ class TournamentController extends Controller implements ClassResourceInterface
         $tournament = $em->findCurrentTournamentForAccount($account);
         return $tournament;
     }
+
+    /**
+     * Get all registered tournaments
+     * @return JsonResponse Return 200 and Tournament array if tournament was founded OR 200 and error message JSON if error
+     *
+     * @ApiDoc(
+     *  section="Tournaments",
+     *  description="Get all registered tournaments",
+     *  resource = true,
+     *  statusCodes = {
+     *     200 = "Returned when successful",
+     *     200 = "Returned when tournament is not found"
+     *   }
+     * )
+     * @Security("has_role('ROLE_USER')")
+    */
+    public function getRegisteredAction()
+    {
+        $account = $this->getUser();
+        $em = $this->getDoctrine()->getRepository("CoreBundle:Tournament");
+        $tournaments = $em->getRegisteredTournamentForAccount($account);
+        return $tournaments;
+    }
 }
