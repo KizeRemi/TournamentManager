@@ -130,7 +130,7 @@ class TournamentController extends Controller implements ClassResourceInterface
         $tournament->setDescription($paramFetcher->get('description'));
         $dateBegin = new \DateTime($paramFetcher->get('date_begin'));
         $tournament->setDateBegin($dateBegin);
-        
+
         return $tournament;
     }
 
@@ -176,16 +176,20 @@ class TournamentController extends Controller implements ClassResourceInterface
     {
 		$account = $this->getUser();
 
-		$registers = $tournament->getAccounts($account);
-		if(count($registers) >= $tournament->getPlayerMax()){
+		$registers = $tournament->getAccounts();
+        $playerMax = $tournament->getPlayerMax();
+		if(count($registers) >= $playerMax){
             $resp = array("message" => "this tournament already has the maximum number of required players");
-            return new JsonResponse($resp, 200);
+            return new JsonResponse($resp, 400);
 		};
 		if($registers->contains($account)){
             $resp = array("message" => "You are already registered in this tournament");
-            return new JsonResponse($resp, 200);
+            return new JsonResponse($resp, 400);
 		}
        	$tournament->addAccount($account); 
+        if(count($registers) == $playerMax){
+            $tournament->setState(2);
+        }
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($tournament);
@@ -240,7 +244,7 @@ class TournamentController extends Controller implements ClassResourceInterface
             $resp = array("message" => "this tournament is not yours");
             return new JsonResponse($resp, 400);
         };
-        if($tournament->getState() != "Ouvert"){
+        if($tournament->getState() != "Complet"){
             $resp = array("message" => "this tournament is already validate");
             return new JsonResponse($resp, 400);      
         }
@@ -250,7 +254,7 @@ class TournamentController extends Controller implements ClassResourceInterface
             $resp = array("message" => "This tournament cannot be validate");
             return new JsonResponse($resp, 400);
         }
-        $tournament->setState(2); 
+        $tournament->setState(3); 
 
         $registers = $registers->toArray();
         $this->get("event_dispatcher")->dispatch(BattleEvent::NAME, new BattleEvent($registers, $tournament));
