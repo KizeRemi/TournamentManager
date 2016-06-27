@@ -67,11 +67,11 @@ class BattleController extends Controller implements ClassResourceInterface
         }
         $battle->setWinner($account);
 
-        if($battle->getNumber() %2 == 0){
+        if($battle->getNumber() %2 == 0 && $battle->getRound() != 1){
             $number = $battle->getNumber()-1;
             $battleTwo = $this->getDoctrine()->getRepository('CoreBundle:Battle')->getByNumberAndTournament($number, $tournament, $round);
             $this->get("event_dispatcher")->dispatch(NextMatchEvent::NAME, new NextMatchEvent($battleTwo, $battle));
-        } else{
+        } else if ($battle->getRound() != 1){
             $number = $battle->getNumber()+1;
             $battleTwo = $this->getDoctrine()->getRepository('CoreBundle:Battle')->getByNumberAndTournament($number, $tournament, $round);
             $this->get("event_dispatcher")->dispatch(NextMatchEvent::NAME, new NextMatchEvent($battle, $battleTwo));
@@ -124,6 +124,7 @@ class BattleController extends Controller implements ClassResourceInterface
 
         return new JsonResponse(null, JsonResponse::HTTP_CREATED);
     }
+
     /**
      * Get a winner for a battle
      * @return JsonResponse Return 200 and winner array if account was founded OR 404 and error message JSON if error
