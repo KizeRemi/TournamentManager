@@ -130,6 +130,7 @@ class TournamentController extends Controller implements ClassResourceInterface
         $tournament->setDescription($paramFetcher->get('description'));
         $dateBegin = new \DateTime($paramFetcher->get('date_begin'));
         $tournament->setDateBegin($dateBegin);
+        
         return $tournament;
     }
 

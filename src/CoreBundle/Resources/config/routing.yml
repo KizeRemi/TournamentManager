@@ -8,3 +8,6 @@ tournament:
 battle:
     type:     rest
     resource: CoreBundle\Controller\BattleController
+comment:
+    type:     rest
+    resource: CoreBundle\Controller\CommentController
