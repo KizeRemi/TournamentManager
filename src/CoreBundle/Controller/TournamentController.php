@@ -239,6 +239,9 @@ class TournamentController extends Controller implements ClassResourceInterface
     public function postValidateAction(ParamFetcherInterface $paramFetcher, Tournament $tournament)
     {
         $account = $this->getUser();
+        $pusher = $this->container->get('gos_web_socket.wamp.pusher');
+        //push(data, route_name, route_arguments)
+        $pusher->push("dfsfsf", 'acme_topic', ['username' => 'user1']);
 
         if($account != $tournament->getAccount()){
             $resp = array("message" => "this tournament is not yours");

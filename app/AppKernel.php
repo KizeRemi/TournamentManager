@@ -22,6 +22,8 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new Nelmio\CorsBundle\NelmioCorsBundle(),
             new Endroid\Bundle\GcmBundle\EndroidGcmBundle(),
+            new Gos\Bundle\WebSocketBundle\GosWebSocketBundle(),
+            new Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle(),
             new UserBundle\UserBundle(),
             new CoreBundle\CoreBundle(),
         ];

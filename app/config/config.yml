@@ -147,3 +147,13 @@ nelmio_cors:
 
 endroid_gcm:
     api_key: "AIzaSyCciiSsqwkINw9DLFi5GRw8xwqkuOzhOTs"
+gos_web_socket:
+    server:
+        port: 8080        #The port the socket server will listen on
+        host: 127.0.0.1   #The host ip to bind to
+        router:
+            resources: ['@CoreBundle/Resources/config/routing_ws.yml']
+    pushers:
+        wamp:
+            host: 127.0.0.1
+            port: 8080

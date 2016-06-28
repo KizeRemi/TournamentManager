@@ -21,3 +21,7 @@ services:
     user.manage_experience:
         class: CoreBundle\Service\SetExperience
         arguments: ['@doctrine.orm.entity_manager']
+    acme_hello.topic_sample_service:
+        class: CoreBundle\Topic\CoreTopic
+        tags:
+            - { name: gos_web_socket.topic }
