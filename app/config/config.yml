@@ -119,6 +119,8 @@ fos_rest:
     routing_loader:
         default_format: json
         include_format: false
+    serializer:
+        serialize_null: true
 
 lexik_jwt_authentication:
     private_key_path: %jwt_private_key_path%
@@ -139,8 +141,9 @@ nelmio_cors:
    paths:
     '^/':
         allow_origin: ['*']
-        allow_headers: ['origin', 'content-type']
+        allow_headers: ['Authorization']
         allow_methods: ['POST', 'PUT', 'GET', 'DELETE','OPTIONS']
         max_age: 3600
+
 endroid_gcm:
     api_key: "AIzaSyCciiSsqwkINw9DLFi5GRw8xwqkuOzhOTs"
