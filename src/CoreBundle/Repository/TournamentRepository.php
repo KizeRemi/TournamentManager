@@ -27,7 +27,7 @@ class TournamentRepository extends \Doctrine\ORM\EntityRepository
 			->select('t')
 			->setParameter('account_id', $account_id)
 			->where('t.account = :account_id')
-			->AndWhere('t.state != 4')
+			->AndWhere('t.state != 5')
 			->getQuery();
 		return $query->getSingleResult();
 	}
@@ -39,7 +39,7 @@ class TournamentRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('t.accounts', 'a')
             ->setParameter('account_id', $account_id)
 		    ->where('a.id = :account_id')
-		    ->AndWhere('t.state != 4')
+		    ->AndWhere('t.state != 5')
 		    ->getQuery();
 		return $query->getResult();
 	}	
