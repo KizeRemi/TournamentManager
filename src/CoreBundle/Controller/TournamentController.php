@@ -239,7 +239,6 @@ class TournamentController extends Controller implements ClassResourceInterface
     public function postValidateAction(ParamFetcherInterface $paramFetcher, Tournament $tournament)
     {
         $account = $this->getUser();
-
         if($account != $tournament->getAccount()){
             $resp = array("message" => "this tournament is not yours");
             return new JsonResponse($resp, 400);
@@ -255,6 +254,7 @@ class TournamentController extends Controller implements ClassResourceInterface
             return new JsonResponse($resp, 400);
         }
         $tournament->setState(3); 
+
 
         $registers = $registers->toArray();
         $this->get("event_dispatcher")->dispatch(BattleEvent::NAME, new BattleEvent($registers, $tournament));
