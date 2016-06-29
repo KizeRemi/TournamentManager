@@ -73,7 +73,7 @@ class TournamentController extends Controller implements ClassResourceInterface
             $resp = array("message" => "Players must be at least 7 days to register");
             return new JsonResponse($resp, 400);
         }
-        die;
+        
         $tournament->setDateBegin($dateBegin);
         $tournament->setDurationBetweenRound($paramFetcher->get('duration_between_round'));
         $tournament->setPlayerMax($paramFetcher->get('player_max'));
