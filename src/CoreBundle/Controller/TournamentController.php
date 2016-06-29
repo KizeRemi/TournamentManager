@@ -73,7 +73,7 @@ class TournamentController extends Controller implements ClassResourceInterface
             $resp = array("message" => "Players must be at least 7 days to register");
             return new JsonResponse($resp, 400);
         }
-        
+
         $tournament->setDateBegin($dateBegin);
         $tournament->setDurationBetweenRound($paramFetcher->get('duration_between_round'));
         $tournament->setPlayerMax($paramFetcher->get('player_max'));
@@ -348,5 +348,42 @@ class TournamentController extends Controller implements ClassResourceInterface
         $em = $this->getDoctrine()->getRepository("CoreBundle:Tournament");
         $tournaments = $em->getRegisteredTournamentForAccount($account);
         return $tournaments;
+    }
+
+    /**
+     * Delete an account in a tournament
+     *
+     * @param Account $account
+     * @param ParamFetcherInterface $paramFetcher Contain all body parameters received
+     * @return JsonResponse Return 201 and empty array if account was deleted OR 400 and error message JSON if error
+     *
+     * @ApiDoc(
+     *  section="Tournaments",
+     *  description="Delete an account in a tournament",
+     *  resource = true,
+     *  statusCodes = {
+     *     201 = "Returned when successful",
+     *     400 = "Returned when invalid tournament"
+     *   }
+     * )
+    * @FOSRest\Delete("/tournament/{tournament}/unsubscribe")
+     */
+    public function deleteAction(ParamFetcherInterface $paramFetcher, Tournament $tournament)
+    {
+        $account = $this->getUser();
+
+        $registers = $tournament->getAccounts();
+        $playerMax = $tournament->getPlayerMax();
+        if(!$registers->contains($account)){
+            $resp = array("message" => "You are not registered in this tournament");
+            return new JsonResponse($resp, 400);
+        }
+        $tournament->removeAccount($account); 
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($tournament);
+        $em->flush();
+
+        return new JsonResponse(null, JsonResponse::HTTP_CREATED);
     }
 }

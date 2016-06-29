@@ -89,7 +89,7 @@ class CommentController extends Controller implements ClassResourceInterface
      *
      * @param Account $account
      * @param ParamFetcherInterface $paramFetcher Contain all body parameters received
-     * @return JsonResponse Return 201 and empty array if comment was created OR 400 and error message JSON if error
+     * @return JsonResponse Return 201 and empty array if comment was deleted OR 400 and error message JSON if error
      *
      * @ApiDoc(
      *  section="Comments",
