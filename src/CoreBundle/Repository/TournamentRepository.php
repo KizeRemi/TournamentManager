@@ -16,7 +16,7 @@ class TournamentRepository extends \Doctrine\ORM\EntityRepository
 			->select('COUNT(t)')
 			->setParameter('account_id', $account_id)
 			->where('t.account = :account_id')
-			->AndWhere('t.state != 4')
+			->AndWhere('t.state != 5')
 			->getQuery();
 		return $query->getSingleScalarResult();
 	}

@@ -63,7 +63,27 @@ class CommentController extends Controller implements ClassResourceInterface
 
         return new JsonResponse(null, JsonResponse::HTTP_CREATED);
     }
-
+    /**
+     * Get all comments for an account
+     * @return JsonResponse Return 200 and Account array if account was founded OR 404 and error message JSON if error
+     *
+     * @ApiDoc(
+     *  section="Comments",
+     *  description="Get all comments for an account",
+     *  resource = true,
+     *  statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when account is not found"
+     *   }
+     * )
+     *
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function cgetAction(Account $account){
+        $em = $this->getDoctrine()->getRepository("CoreBundle:Comment");
+        $comments = $em->findByAccount($account);
+        return $comments;
+    }
     /**
      * Delete a comment in account profil
      *

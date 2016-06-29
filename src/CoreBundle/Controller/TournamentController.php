@@ -65,9 +65,18 @@ class TournamentController extends Controller implements ClassResourceInterface
         $tournament->setName($paramFetcher->get('name'));
         $tournament->setGame($paramFetcher->get('game'));
         $dateBegin = new \DateTime($paramFetcher->get('date_begin'));
+        $date = new \DateTime();
+        $interval = new \DateInterval('P7D');
+        $validDate = $date->add($interval);
+
+        if($dateBegin < $date || $dateBegin < $validDate){
+            $resp = array("message" => "Players must be at least 7 days to register");
+            return new JsonResponse($resp, 400);
+        }
+        die;
         $tournament->setDateBegin($dateBegin);
         $tournament->setDurationBetweenRound($paramFetcher->get('duration_between_round'));
-        $tournament->setPlayerMax(8);
+        $tournament->setPlayerMax($paramFetcher->get('player_max'));
         $tournament->setState(1);
         $tournament->setAccount($account);
 	    $validator = $this->get("validator");
@@ -239,9 +248,10 @@ class TournamentController extends Controller implements ClassResourceInterface
     public function postValidateAction(ParamFetcherInterface $paramFetcher, Tournament $tournament)
     {
         $account = $this->getUser();
+
         $pusher = $this->container->get('gos_web_socket.wamp.pusher');
         //push(data, route_name, route_arguments)
-        $pusher->push("dfsfsf", 'acme_topic', ['username' => 'user1']);
+        $pusher->push("Le tournoi ".$tournament->getName()." a ete valide", 'acme_topic', ['username' => 'anon-16294297925773872b5d19c79627001d']);
 
         if($account != $tournament->getAccount()){
             $resp = array("message" => "this tournament is not yours");
