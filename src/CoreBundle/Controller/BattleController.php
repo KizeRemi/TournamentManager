@@ -80,7 +80,7 @@ class BattleController extends Controller implements ClassResourceInterface
         if($battle->getRound() == 1){
             $bonus = 100;
         }
-        $this->get('user.manage_experience')->setExperienceToAccount($account, 50+$bonus);
+        $this->get('user.manage_experience')->setNotificationTournamentToAccount($account);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($battle);

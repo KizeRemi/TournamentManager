@@ -50,6 +50,7 @@ class TournamentController extends Controller implements ClassResourceInterface
      * @FOSRest\RequestParam(name="date_begin", requirements=@CoreBundle\Validator\Constraints\Date, nullable=false, description="Tournament's begin date")
      * @FOSRest\RequestParam(name="duration_between_round", nullable=false, requirements=@CoreBundle\Validator\Constraints\Number, description="Tournament's duration between round")
      * @FOSRest\RequestParam(name="player_max", nullable=true, requirements=@CoreBundle\Validator\Constraints\Number, description="Maximum players of a tournament")
+     * @FOSRest\RequestParam(name="description", nullable=true, description="Maximum players of a tournament")
      */
 	public function postAction(ParamFetcherInterface $paramFetcher)
     {
@@ -76,6 +77,7 @@ class TournamentController extends Controller implements ClassResourceInterface
 
         $tournament->setDateBegin($dateBegin);
         $tournament->setDurationBetweenRound($paramFetcher->get('duration_between_round'));
+        $tournament->setDescription($paramFetcher->get('description'));
         $tournament->setPlayerMax($paramFetcher->get('player_max'));
         $tournament->setState(1);
         $tournament->setAccount($account);
@@ -249,10 +251,6 @@ class TournamentController extends Controller implements ClassResourceInterface
     {
         $account = $this->getUser();
 
-        $pusher = $this->container->get('gos_web_socket.wamp.pusher');
-        //push(data, route_name, route_arguments)
-        $pusher->push("Le tournoi ".$tournament->getName()." a ete valide", 'acme_topic', ['username' => 'anon-16294297925773872b5d19c79627001d']);
-
         if($account != $tournament->getAccount()){
             $resp = array("message" => "this tournament is not yours");
             return new JsonResponse($resp, 400);
@@ -273,9 +271,8 @@ class TournamentController extends Controller implements ClassResourceInterface
 
         $registers = $registers->toArray();
         $this->get("event_dispatcher")->dispatch(BattleEvent::NAME, new BattleEvent($registers, $tournament));
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($tournament);
-        $em->flush($tournament);
+        $this->get('user.notification')->setNotificationTournamentToAccount($registers, $tournament);
+
 
         return new JsonResponse(null, JsonResponse::HTTP_CREATED);
     }
