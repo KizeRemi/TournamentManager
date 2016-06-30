@@ -262,11 +262,10 @@ class AccountController extends Controller implements ClassResourceInterface
 	    $img = $paramFetcherInterface->get("img");
 
 
-
-	    if(file_exists($this->container->getParameter('accounts_images_directory')."/".$account->getImg())){
-	    	unlink($this->container->getParameter('accounts_images_directory')."/".$account->getImg());    	
-	    }
-
+    	    if(file_exists($this->container->getParameter('accounts_images_directory')."/".$account->getImg())){
+    	    	unlink($this->container->getParameter('accounts_images_directory')."/".$account->getImg());    	
+    	    }
+        }
         $base_to_php = explode(',', $img);
         $data = base64_decode($base_to_php[1]);
 
@@ -319,10 +318,12 @@ class AccountController extends Controller implements ClassResourceInterface
         $account = $this->getUser();
 
 	    $banner = $paramFetcherInterface->get("banner");
-	    
-	    if(file_exists($this->container->getParameter('accounts_banners_directory')."/".$account->getBanner())){
-	    	unlink($this->container->getParameter('accounts_banners_directory')."/".$account->getBanner());    	
-	    }
+	    if($account->getBanner() != null){
+            if(file_exists($this->container->getParameter('accounts_banners_directory')."/".$account->getBanner())){
+                unlink($this->container->getParameter('accounts_banners_directory')."/".$account->getBanner());     
+            }    
+        }
+
 
         $base_to_php = explode(',', $banner);
         $data = base64_decode($base_to_php[1]);

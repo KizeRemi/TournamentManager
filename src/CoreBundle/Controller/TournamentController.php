@@ -398,6 +398,29 @@ class TournamentController extends Controller implements ClassResourceInterface
     }
 
     /**
+     * Get current battle in a tournament for an account
+     * @return JsonResponse Return 200 and Tournament array if tournament was founded OR 200 and error message JSON if error
+     *
+     * @ApiDoc(
+     *  section="Tournaments",
+     *  description="Get current battle in a tournament for an account",
+     *  resource = true,
+     *  statusCodes = {
+     *     200 = "Returned when successful",
+     *     200 = "Returned when tournament is not found"
+     *   }
+     * )
+     * @Security("has_role('ROLE_USER')")
+    */
+    public function getCurrentBattleAction(Tournament $tournament)
+    {
+        $account = $this->getUser();
+        $em = $this->getDoctrine()->getRepository("CoreBundle:Battle");
+        $tournament = $em->getCurrentBattleForAccount($account, $tournament);
+        return $tournament;
+    }
+
+    /**
      * Delete an account in a tournament
      *
      * @param Account $account

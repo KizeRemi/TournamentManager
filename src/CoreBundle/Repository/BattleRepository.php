@@ -23,4 +23,18 @@ class BattleRepository extends \Doctrine\ORM\EntityRepository
 			->getQuery();
 		return $query->getSingleResult();
 	}
+
+	public function getCurrentBattleForAccount($account, $tournament)
+	{
+		$query = $this->createQueryBuilder('b')
+			->select('b')
+			->setParameter('tournament', $tournament)
+			->setParameter('account', $account)
+		    ->Where('b.tournament = :tournament')
+		    ->AndWhere('b.playerTwo = :account')
+		    ->OrWhere('b.playerOne = :account')
+		    ->AndWhere('b.winner is null')
+		    ->getQuery();
+		return $query->getResult();
+	}
 }
