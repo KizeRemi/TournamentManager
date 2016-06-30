@@ -66,22 +66,22 @@ class BattleController extends Controller implements ClassResourceInterface
             $resp = array("message" => "The user ".$battle->getWinner()->getNickname()." has already winning. Send a message to organisator for contest");
             return new JsonResponse($resp, 400);   
         }
+        $roundMax = $tournament->getPlayerMax()/2; 
         $battle->setWinner($account);
 
-        if($battle->getNumber() %2 == 0 && $battle->getRound() != 1){
+        if($battle->getNumber() %2 == 0 && $battle->getRound() != $roundMax){
             $number = $battle->getNumber()-1;
             $battleTwo = $this->getDoctrine()->getRepository('CoreBundle:Battle')->getByNumberAndTournament($number, $tournament, $round);
             $this->get("event_dispatcher")->dispatch(NextMatchEvent::NAME, new NextMatchEvent($battleTwo, $battle));
-        } else if ($battle->getRound() != 1){
+        } else if ($battle->getRound() != $roundMax){
             $number = $battle->getNumber()+1;
             $battleTwo = $this->getDoctrine()->getRepository('CoreBundle:Battle')->getByNumberAndTournament($number, $tournament, $round);
             $this->get("event_dispatcher")->dispatch(NextMatchEvent::NAME, new NextMatchEvent($battle, $battleTwo));
         }
-        if($battle->getRound() == 1){
+        if($battle->getRound() == $roundMax){
             $bonus = 100;
         }
-        $this->get('user.manage_experience')->setNotificationTournamentToAccount($account);
-
+        $this->get('user.manage_experience')->setExperienceToAccount($account, 50+$bonus);
         $em = $this->getDoctrine()->getManager();
         $em->persist($battle);
         $em->flush($battle);

@@ -5,14 +5,16 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use CoreBundle\Event\NextMatchEvent;
 use Doctrine\ORM\EntityManager;
 use CoreBundle\Entity\Battle;
+use CoreBundle\Service\SetNotification;
 
 class NextMatchListener implements EventSubscriberInterface
 {
 	private $em;
-
-    public function __construct(EntityManager $entityManager)
+    private $un;
+    public function __construct(EntityManager $entityManager, SetNotification $setNotification)
     {
     	 $this->em = $entityManager;
+         $this->un = $setNotification;
     }
 
     public static function getSubscribedEvents()
@@ -25,10 +27,9 @@ class NextMatchListener implements EventSubscriberInterface
 
     public function create(NextMatchEvent $event)
     {
-
         if($event->getBattleTwo()->getWinner() != null && $event->getBattleOne()->getWinner() != null){
             $tournament = $event->getBattleTwo()->getTournament();
-            $round = $event->getBattleTwo()->getRound()/2;
+            $round = $event->getBattleTwo()->getRound()+1;
             $number = $event->getBattleTwo()->getNumber()/2;
             $battle = $this->em->getRepository('CoreBundle:Battle')->getByNumberAndTournament($number, $tournament, $round);
             $battle->setPlayerOne($event->getBattleOne()->getWinner());
@@ -37,6 +38,9 @@ class NextMatchListener implements EventSubscriberInterface
             $battle->setReadyPlayerTwo(false); 
             $this->em->persist($battle);     
             $this->em->flush($battle);
+            $this->un->setNotificationBattleToAccount($event->getBattleOne()->getWinner(), $battle);
+            $this->un->setNotificationBattleToAccount($event->getBattleTwo()->getWinner(), $battle);
         }
+
     }
 }
