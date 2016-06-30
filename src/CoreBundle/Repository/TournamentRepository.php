@@ -43,4 +43,24 @@ class TournamentRepository extends \Doctrine\ORM\EntityRepository
 		    ->getQuery();
 		return $query->getResult();
 	}	
+	public function getLastFinishedTournament()
+	{
+		$query = $this->createQueryBuilder('t')
+			->select('t')
+		    ->AndWhere('t.state = 5')
+		    ->orderBy('t.dateBegin', 'DESC')
+		    ->setMaxResults(5)
+		    ->getQuery();
+		return $query->getResult();
+	}
+	public function getCurrentTournament()
+	{
+		$query = $this->createQueryBuilder('t')
+			->select('t')
+		    ->AndWhere('t.state = 4')
+		    ->orderBy('t.dateBegin', 'DESC')
+		    ->setMaxResults(5)
+		    ->getQuery();
+		return $query->getResult();
+	}
 }

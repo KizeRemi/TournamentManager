@@ -169,6 +169,51 @@ class TournamentController extends Controller implements ClassResourceInterface
         return $tournaments;
     }
 
+   /**
+     * Get the last 5 finished tournaments
+     * @return JsonResponse Return 200 and Account array if account was founded OR 404 and error message JSON if error
+     *
+     * @ApiDoc(
+     *  section="Tournaments",
+     *  description="Get the last 5 finished tournaments",
+     *  resource = true,
+     *  statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when tournament is not found"
+     *   }
+     * )
+     * @Security("has_role('ROLE_USER')")
+    */
+    public function cgetLastFinishedAction()
+    {
+        $em = $this->getDoctrine()->getRepository("CoreBundle:Tournament");
+        $tournaments = $em-> getLastFinishedTournament();
+        return $tournaments;
+    }
+   /**
+     * Get the current tournaments
+     * @return JsonResponse Return 200 and Account array if account was founded OR 404 and error message JSON if error
+     *
+     * @ApiDoc(
+     *  section="Tournaments",
+     *  description="Get the current tournaments",
+     *  resource = true,
+     *  statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when tournament is not found"
+     *   }
+     * )
+     * @Security("has_role('ROLE_USER')")
+     * @FOSRest\Get("/tournaments/current/all")
+    */
+    public function cgetCurrentAction()
+    {
+        $em = $this->getDoctrine()->getRepository("CoreBundle:Tournament");
+        $tournaments = $em->getCurrentTournament();
+        return $tournaments;
+    }
+
+
     /**
      * register to a match
      *
