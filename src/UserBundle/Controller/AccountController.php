@@ -262,7 +262,8 @@ class AccountController extends Controller implements ClassResourceInterface
 	    $img = $paramFetcherInterface->get("img");
 
 
-	    if($account->getImg() != null){
+
+	    if(file_exists($this->container->getParameter('accounts_images_directory')."/".$account->getImg())){
 	    	unlink($this->container->getParameter('accounts_images_directory')."/".$account->getImg());    	
 	    }
 
@@ -283,6 +284,7 @@ class AccountController extends Controller implements ClassResourceInterface
 
 	    $resp = array("filename" => $filepath);
         $account->setImg($imgPath);
+
         $userManager = $this->get("fos_user.user_manager");
         $userManager->updateUser($account);
         $em = $this->getDoctrine()->getManager();
@@ -318,7 +320,7 @@ class AccountController extends Controller implements ClassResourceInterface
 
 	    $banner = $paramFetcherInterface->get("banner");
 	    
-	    if($account->getBanner() != null){
+	    if(file_exists($this->container->getParameter('accounts_banners_directory')."/".$account->getBanner())){
 	    	unlink($this->container->getParameter('accounts_banners_directory')."/".$account->getBanner());    	
 	    }
 

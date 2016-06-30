@@ -78,7 +78,7 @@ class Tournament
     /**
      * @var string Tournament state
      *
-     * @ORM\Column(name="state", type="string", length=15, columnDefinition="enum('Ouvert','Complet','Verouillé', 'En cours', 'Terminé')")
+     * @ORM\Column(name="state", type="string", length=15, columnDefinition="enum('Ouvert','Complet','Verrouillé', 'En cours', 'Terminé')")
      * @expose
      */
     private $state;
