@@ -60,8 +60,9 @@ class CommentController extends Controller implements ClassResourceInterface
     	$em = $this->getDoctrine()->getManager();
         $em->persist($comment);
         $em->flush($comment);
-
-        return new JsonResponse(null, JsonResponse::HTTP_CREATED);
+        $em->refresh($comment);
+        $resp = array("id" => $comment->getId());
+        return new JsonResponse($resp, JsonResponse::HTTP_CREATED);
     }
     /**
      * Get all comments for an account

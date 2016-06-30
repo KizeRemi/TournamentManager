@@ -88,8 +88,10 @@ class TournamentController extends Controller implements ClassResourceInterface
         $em = $this->getDoctrine()->getManager();
         $em->persist($tournament);
         $em->flush();
+        $em->refresh($tournament);
 
-        return new JsonResponse(null, JsonResponse::HTTP_CREATED);
+        $resp = array("id" => $tournament->getId());
+        return new JsonResponse($resp, JsonResponse::HTTP_CREATED);
     }
 
    /**
