@@ -395,7 +395,6 @@ class AccountController extends Controller implements ClassResourceInterface
     	
     	$em = $this->getDoctrine()->getRepository("UserBundle:Account");
 		$account = $em->find($account);
-		$account->setBanner("/accounts/banners/".$account->getBanner());
         return $account;
     }
     
