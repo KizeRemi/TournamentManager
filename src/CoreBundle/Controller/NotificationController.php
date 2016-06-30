@@ -76,10 +76,6 @@ class NotificationController extends Controller implements ClassResourceInterfac
         	$resp = array("message" => "this notification is not yours");
             return new JsonResponse($resp, 400); 
         }
-        $notification->setIsSeen(1);
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($notification);
-        $em->flush();
+        $this->get('user.notification')->updateSeenNotification($notification);
     }
 }

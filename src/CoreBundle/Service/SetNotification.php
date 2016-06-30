@@ -46,4 +46,11 @@ class SetNotification
         $this->em->persist($notification);
         $this->em->flush();
     }
+    
+    public function updateSeenNotification(Notification $notification)
+    {
+        $notification->setIsSeen(true);
+        $this->em->persist($notification);
+        $this->em->flush();
+    }
 }
