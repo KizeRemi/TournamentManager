@@ -10,4 +10,16 @@ namespace CoreBundle\Repository;
  */
 class NotificationRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function getLastNotif($account)
+	{
+		$query = $this->createQueryBuilder('n')
+			->select('n')
+			->setParameter('account', $account)
+			->where('n.account = :account')
+			->AndWhere('n.isSeen = false')
+			->setMaxResults(1)
+			->orderBy('n.createdAt', 'DESC')
+			->getQuery();
+		return $query->getResult();
+	}
 }

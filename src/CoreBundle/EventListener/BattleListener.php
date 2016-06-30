@@ -47,7 +47,8 @@ class BattleListener implements EventSubscriberInterface
             }
         }
         while($roundMax >= 1){
-            $round++;
+            $round++;                
+            $roundMax = $roundMax/2;
             for($i = 1; $i <= $roundMax; $i++){
                 $battle = new Battle();
                 $battle->setPlayerOne(null);
@@ -55,7 +56,6 @@ class BattleListener implements EventSubscriberInterface
                 $battle->setReadyPlayerOne(false);
                 $battle->setReadyPlayerTwo(false); 
                 $battle->setNumber($i);
-                $roundMax = $roundMax/2;
                 $battle->setround($round);
                 $battle->setTournament($tournament);  
                 $this->em->persist($battle);     

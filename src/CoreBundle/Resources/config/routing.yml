@@ -11,3 +11,6 @@ battle:
 comment:
     type:     rest
     resource: CoreBundle\Controller\CommentController
+notification:
+    type:     rest
+    resource: CoreBundle\Controller\NotificationController

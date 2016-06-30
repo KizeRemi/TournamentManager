@@ -273,7 +273,10 @@ class TournamentController extends Controller implements ClassResourceInterface
         $this->get("event_dispatcher")->dispatch(BattleEvent::NAME, new BattleEvent($registers, $tournament));
         $this->get('user.notification')->setNotificationTournamentToAccount($registers, $tournament);
 
-
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($tournament);
+        $em->flush();
+        
         return new JsonResponse(null, JsonResponse::HTTP_CREATED);
     }
 
@@ -363,7 +366,7 @@ class TournamentController extends Controller implements ClassResourceInterface
      *     400 = "Returned when invalid tournament"
      *   }
      * )
-    * @FOSRest\Delete("/tournament/{tournament}/unsubscribe")
+     * @FOSRest\Delete("/tournament/{tournament}/unsubscribe")
      */
     public function deleteAction(ParamFetcherInterface $paramFetcher, Tournament $tournament)
     {

@@ -118,10 +118,13 @@ class BattleController extends Controller implements ClassResourceInterface
 
         if($account == $battle->getPlayerOne()){
             $battle->setReadyPlayerOne(true);
+            $this->get('user.notification')->setNotificationBattleToAccount($battle->getPlayerTwo(), $battle);
         } else {
             $battle->setReadyPlayerTwo(true);
+            $this->get('user.notification')->setNotificationBattleToAccount($battle->getPlayerOne(), $battle);
         }
 
+        
         $em = $this->getDoctrine()->getManager();
         $em->persist($battle);
         $em->flush($battle);

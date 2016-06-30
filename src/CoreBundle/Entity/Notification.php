@@ -69,6 +69,17 @@ class Notification
      */
     private $battle;
 
+    /**
+     * @ORM\Column(name="seen",type="boolean", length=255, nullable=false)
+     * @expose
+     */
+    private $isSeen;
+
+    /**
+     * @ORM\Column(name="created_at",type="datetime", length=25, nullable=false)
+     * @expose
+     */
+    private $createdAt;
 
     /**
      * Get id
@@ -198,5 +209,53 @@ class Notification
     public function getBattle()
     {
         return $this->battle;
+    }
+
+    /**
+     * Set isSeen
+     *
+     * @param boolean $isSeen
+     *
+     * @return Notification
+     */
+    public function setIsSeen($isSeen)
+    {
+        $this->isSeen = $isSeen;
+
+        return $this;
+    }
+
+    /**
+     * Get isSeen
+     *
+     * @return boolean
+     */
+    public function getIsSeen()
+    {
+        return $this->isSeen;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     *
+     * @return Notification
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 }
