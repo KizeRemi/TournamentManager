@@ -15,7 +15,7 @@ services:
            - { name: kernel.event_subscriber }
     tournament.nextmatch_listener:
         class: CoreBundle\EventListener\NextMatchListener
-        arguments: ['@doctrine.orm.entity_manager']
+        arguments: ['@doctrine.orm.entity_manager', '@user.notification']
         tags:
            - { name: kernel.event_subscriber }
     user.manage_experience:
