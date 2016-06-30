@@ -282,7 +282,7 @@ class AccountController extends Controller implements ClassResourceInterface
         $filepath = __DIR__.'/../../../web/accounts/images/'.$imgPath;
         $file = file_put_contents($filepath,$data);
 
-	    $resp = array("filename" => $filepath);
+	    $resp = array("filename" => $imgPath);
         $account->setImg($imgPath);
 
         $userManager = $this->get("fos_user.user_manager");
@@ -339,7 +339,7 @@ class AccountController extends Controller implements ClassResourceInterface
         $filepath = __DIR__.'/../../../web/accounts/banners/'.$bannerPath;
         $file = file_put_contents($filepath,$data);
 
-        $resp = array("filename" => $filepath);
+        $resp = array("filename" => $bannerPath);
         $account->setBanner($bannerPath);
         $userManager = $this->get("fos_user.user_manager");
         $userManager->updateUser($account);
