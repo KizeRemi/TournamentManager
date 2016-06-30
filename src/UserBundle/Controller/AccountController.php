@@ -262,6 +262,7 @@ class AccountController extends Controller implements ClassResourceInterface
 	    $img = $paramFetcherInterface->get("img");
 
 
+        if($account->getImg() != null){
     	    if(file_exists($this->container->getParameter('accounts_images_directory')."/".$account->getImg())){
     	    	unlink($this->container->getParameter('accounts_images_directory')."/".$account->getImg());    	
     	    }
