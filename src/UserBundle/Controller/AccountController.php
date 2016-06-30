@@ -21,6 +21,9 @@ use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Model\UserInterface;
 use UserBundle\EventListener\RegistrationListener;
+use Hshn\Base64EncodedFile\HttpFoundation\File\Base64EncodedFile;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class AccountController
@@ -248,7 +251,7 @@ class AccountController extends Controller implements ClassResourceInterface
 	 *   }
 	 * )
 	 * @FOSRest\Post("/me/image")
-	 * @FOSRest\FileParam(name="img", image=true, default="noPicture")
+	 * @FOSRest\RequestParam(name="img", nullable=false, description="Account's email")
 	 *
 	 * @Security("has_role('ROLE_USER')")
 	 *
@@ -257,14 +260,29 @@ class AccountController extends Controller implements ClassResourceInterface
         $account = $this->getUser();
 
 	    $img = $paramFetcherInterface->get("img");
-	    
+
+
 	    if($account->getImg() != null){
 	    	unlink($this->container->getParameter('accounts_images_directory')."/".$account->getImg());    	
 	    }
 
-	    $fileName = $this->get('user.images_uploader')->upload("img", $img);
-	    $account->setImg($fileName);
-	    $resp = array("filename" => "/accounts/images/".$fileName);
+        $base_to_php = explode(',', $img);
+        $data = base64_decode($base_to_php[1]);
+
+        $base_to_php = explode('/', $base_to_php[0]);
+        $extension = explode(';', $base_to_php[1]);
+
+        if($extension[0] != "jpeg" && $extension[0] != "bmp" && $extension[0] != "jpg" && $extension[0] != "png"){
+            $resp = array("message" => "Bad extension");
+            return new JsonResponse($resp, JsonResponse::HTTP_BAD_REQUEST);
+        }
+		$name = uniqid();
+        $imgPath = $name.'.'.$extension[0];
+        $filepath = __DIR__.'/../../../web/accounts/images/'.$imgPath;
+        $file = file_put_contents($filepath,$data);
+
+	    $resp = array("filename" => $filepath);
+        $account->setImg($imgPath);
         $userManager = $this->get("fos_user.user_manager");
         $userManager->updateUser($account);
         $em = $this->getDoctrine()->getManager();
@@ -290,7 +308,7 @@ class AccountController extends Controller implements ClassResourceInterface
 	 *   }
 	 * )
 	 * @FOSRest\Post("/me/banner")
-	 * @FOSRest\FileParam(name="banner", image=true, default="noPicture")
+     * @FOSRest\RequestParam(name="banner", nullable=false, description="Account's email")
 	 *
 	 * @Security("has_role('ROLE_USER')")
 	 *
@@ -304,12 +322,23 @@ class AccountController extends Controller implements ClassResourceInterface
 	    	unlink($this->container->getParameter('accounts_banners_directory')."/".$account->getBanner());    	
 	    }
 
-	    $fileName = $this->get('user.banners_uploader')->upload("banner", $banner);
-	    $account->setBanner($fileName);
+        $base_to_php = explode(',', $banner);
+        $data = base64_decode($base_to_php[1]);
 
-        $resp = array("message" => "/accounts/banners/".$fileName);
-        
+        $base_to_php = explode('/', $base_to_php[0]);
+        $extension = explode(';', $base_to_php[1]);
 
+        if($extension[0] != "jpeg" && $extension[0] != "bmp" && $extension[0] != "jpg" && $extension[0] != "png"){
+            $resp = array("message" => "Bad extension");
+            return new JsonResponse($resp, JsonResponse::HTTP_BAD_REQUEST);
+        }
+        $name = uniqid();
+        $bannerPath = $name.'.'.$extension[0];
+        $filepath = __DIR__.'/../../../web/accounts/banners/'.$bannerPath;
+        $file = file_put_contents($filepath,$data);
+
+        $resp = array("filename" => $filepath);
+        $account->setBanner($bannerPath);
         $userManager = $this->get("fos_user.user_manager");
         $userManager->updateUser($account);
         $em = $this->getDoctrine()->getManager();
