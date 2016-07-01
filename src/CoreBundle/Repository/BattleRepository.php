@@ -31,8 +31,7 @@ class BattleRepository extends \Doctrine\ORM\EntityRepository
 			->setParameter('tournament', $tournament)
 			->setParameter('account', $account)
 		    ->Where('b.tournament = :tournament')
-		    ->AndWhere('b.playerTwo = :account')
-		    ->OrWhere('b.playerOne = :account')
+		    ->AndWhere('b.playerTwo = :account OR b.playerOne = :account')
 		    ->AndWhere('b.winner is null')
 		    ->getQuery();
 		return $query->getResult();
