@@ -76,25 +76,31 @@ class NotificationController extends Controller implements ClassResourceInterfac
         foreach($notifs as $notif){
             if($notif->getType() == 1){
                 $resp = array(
-                           "name" => $notif->getTournament()->getName(),
-                           "game" => $notif->getTournament()->getGame()
+                            "id_notif" => $notif->getId(),
+                            "name" => $notif->getTournament()->getName(),
+                            "game" => $notif->getTournament()->getGame(),
+                            "type" => $notif->getType(),
                 );       
             }    
+
             if($notif->getType() == 2){
                 if($account == $notif->getBattle()->getPlayerOne()){
                     $opponent = $notif->getBattle()->getPlayerTwo()->getNickname();
                 } else {
                     $opponent = $notif->getBattle()->getPlayerOne()->getNickname();
                 }
-                $resp = array( "id_battle" => $notif->getBattle()->getId(),
-                           "name" => $notif->getBattle()->getTournament()->getName(),
-                           "opponent" => $opponent                
+                $resp = array( 
+                            "id_notif" => $notif->getId(),
+                            "type" => $notif->getType(),
+                            "id_battle" => $notif->getBattle()->getId(),
+                            "name" => $notif->getBattle()->getTournament()->getName(),
+                            "opponent" => $opponent                
                 );       
             }       
         }
 
 
-        return new JsonResponse($resp, JsonResponse::HTTP_BAD_REQUEST);
+        return new JsonResponse($resp);
     }
 
    	/**
